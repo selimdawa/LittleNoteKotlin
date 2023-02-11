@@ -34,7 +34,6 @@ import com.flatcode.littlenote.databinding.ActivityHomeBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import java.text.MessageFormat
-import java.util.*
 
 class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
 
@@ -65,7 +64,7 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
         } else if (sharedPreferences.getString(DATA.COLOR_OPTION, "NIGHT_ONE") == "NIGHT_ONE") {
             binding!!.toolbar.mode.setBackgroundResource(R.drawable.moon)
         }
-        if (Objects.requireNonNull(DATA.FIREBASE_USER)!!.isAnonymous) {
+        if (DATA.FIREBASE_USER!!.isAnonymous) {
             binding!!.toolbar.info.visibility = View.GONE
             binding!!.toolbar.sync.visibility = View.VISIBLE
         } else {
@@ -81,7 +80,7 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
         noteAdapter = object : FirestoreRecyclerAdapter<Note, NoteViewHolder>(allNotes) {
             override fun onBindViewHolder(
                 noteViewHolder: NoteViewHolder, i: Int,
-                note: Note
+                note: Note,
             ) {
                 noteViewHolder.title.text = note.title
                 noteViewHolder.description.text = note.content
@@ -144,7 +143,7 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding!!.recyclerView.adapter = noteAdapter
         binding!!.toolbar.sync.setOnClickListener {
-            if (DATA.FIREBASE_USER!!.isAnonymous) {
+            if (DATA.FIREBASE_USER.isAnonymous) {
                 VOID.Intent1(context, CLASS.LOGIN)
                 overridePendingTransition(R.anim.slide_up, R.anim.slide_down)
             } else {
@@ -159,14 +158,14 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
         binding!!.toolbar.info.setOnClickListener {
             VOID.aboutAccount(
                 context,
-                DATA.FIREBASE_USER!!.displayName, DATA.FIREBASE_USER.email
+                DATA.FIREBASE_USER.displayName, DATA.FIREBASE_USER.email
             )
         }
     }
 
     private fun checkUser() {
         // if user is real or not
-        if (Objects.requireNonNull(DATA.FIREBASE_USER)!!.isAnonymous) {
+        if (DATA.FIREBASE_USER!!.isAnonymous) {
             displayAlert()
         } else {
             FirebaseAuth.getInstance().signOut()
@@ -187,7 +186,7 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
             .setNegativeButton(R.string.alert_delete_negative) { dialog: DialogInterface?, which: Int ->
                 // ToDO: delete all the notes created by the Anon user
                 // TODO: delete the anon user
-                Objects.requireNonNull(DATA.FIREBASE_USER)!!.delete()
+                DATA.FIREBASE_USER!!.delete()
                     .addOnSuccessListener { aVoid: Void? ->
                         VOID.Intent1(context, CLASS.SPLASH)
                         overridePendingTransition(R.anim.slide_up, R.anim.slide_down)

@@ -20,12 +20,12 @@ class NoteDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         THEME.setThemeOfApp(context)
         super.onCreate(savedInstanceState)
-        binding = ActivityNoteDetailsBinding.inflate(
-            layoutInflater
-        )
+        binding = ActivityNoteDetailsBinding.inflate(layoutInflater)
         val view = binding!!.root
         setContentView(view)
+
         data = intent
+
         binding!!.toolbar.nameSpace.text = data!!.getStringExtra(DATA.TITLE)
         binding!!.description.movementMethod = ScrollingMovementMethod()
         binding!!.description.text = data!!.getStringExtra(DATA.CONTENT)
