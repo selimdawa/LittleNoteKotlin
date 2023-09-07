@@ -64,6 +64,7 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
         } else if (sharedPreferences.getString(DATA.COLOR_OPTION, "NIGHT_ONE") == "NIGHT_ONE") {
             binding!!.toolbar.mode.setBackgroundResource(R.drawable.moon)
         }
+
         if (DATA.FIREBASE_USER!!.isAnonymous) {
             binding!!.toolbar.info.visibility = View.GONE
             binding!!.toolbar.sync.visibility = View.VISIBLE
@@ -71,6 +72,7 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
             binding!!.toolbar.info.visibility = View.VISIBLE
             binding!!.toolbar.sync.visibility = View.GONE
         }
+
         val query = DATA.FIREBASE_STORE.collection(DATA.PARENT_PATH).document(DATA.FirebaseUserUid)
             .collection(DATA.CHILD_PATH).orderBy(DATA.TITLE, Query.Direction.DESCENDING)
         // query notes > uid > myNotes
@@ -78,18 +80,12 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
             .setQuery(query, Note::class.java)
             .build()
         noteAdapter = object : FirestoreRecyclerAdapter<Note, NoteViewHolder>(allNotes) {
-            override fun onBindViewHolder(
-                noteViewHolder: NoteViewHolder, i: Int,
-                note: Note,
-            ) {
+            override fun onBindViewHolder(noteViewHolder: NoteViewHolder, i: Int, note: Note) {
                 noteViewHolder.title.text = note.title
                 noteViewHolder.description.text = note.content
                 val code = DATA.randomColor
                 noteViewHolder.card.setCardBackgroundColor(
-                    noteViewHolder.view.resources.getColor(
-                        code,
-                        null
-                    )
+                    noteViewHolder.view.resources.getColor(code, null)
                 )
                 val docId = noteAdapter!!.snapshots.getSnapshot(i).id
                 noteViewHolder.view.setOnClickListener {
@@ -227,10 +223,8 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
     }
 
     // Color Mode ----------------------------- Start
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        if (key == DATA.COLOR_OPTION) {
-            recreate()
-        }
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (key == DATA.COLOR_OPTION) recreate()
     }
 
     class SettingFragment : PreferenceFragmentCompat() {
@@ -241,10 +235,9 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == SETTINGS_CODE) {
-            recreate()
-        }
-    } // Color Mode -------------------------------- End
+        if (requestCode == SETTINGS_CODE) recreate()
+    }
+    // Color Mode -------------------------------- End
 
     companion object {
         private const val SETTINGS_CODE = 234
