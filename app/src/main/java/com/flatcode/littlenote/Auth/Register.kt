@@ -14,7 +14,7 @@ import com.flatcode.littlenote.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import java.util.*
+import java.util.Objects
 
 class Register : AppCompatActivity() {
 
@@ -29,19 +29,24 @@ class Register : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         val view = binding!!.root
         setContentView(view)
+
         VOID.Logo(baseContext, binding!!.logo)
         VOID.Intro(baseContext, binding!!.background, binding!!.backWhite, binding!!.backBlack)
+
         dialog = ProgressDialog(this)
         dialog!!.setTitle("Please wait...")
         dialog!!.setCanceledOnTouchOutside(false)
         auth = FirebaseAuth.getInstance()
+
         binding!!.login.setOnClickListener { VOID.Intent1(context, CLASS.LOGIN) }
         binding!!.go.setOnClickListener {
             dialog!!.setMessage("A new account is created...")
+
             val Username = binding!!.nameEt.text.toString()
             val UserEmail = binding!!.emailEt.text.toString()
             val UserPass = binding!!.cPasswordEt.text.toString()
             val ConfirmPass = binding!!.passwordEt.text.toString()
+
             if (UserEmail.isEmpty() || Username.isEmpty() || UserPass.isEmpty() || ConfirmPass.isEmpty()) {
                 Toast.makeText(context, R.string.empty_required_all, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener

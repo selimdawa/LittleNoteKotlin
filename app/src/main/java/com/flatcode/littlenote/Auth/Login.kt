@@ -4,7 +4,6 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +16,7 @@ import com.flatcode.littlenote.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.*
+import java.util.Objects
 
 class Login : AppCompatActivity() {
 
@@ -34,16 +33,20 @@ class Login : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding!!.root
         setContentView(view)
+
         VOID.Logo(baseContext, binding!!.logo)
         VOID.Intro(baseContext, binding!!.background, binding!!.backWhite, binding!!.backBlack)
+
         dialog = ProgressDialog(this)
         dialog!!.setTitle("Please wait...")
         dialog!!.setCanceledOnTouchOutside(false)
+
         user = FirebaseAuth.getInstance().currentUser
         auth = FirebaseAuth.getInstance()
         store = FirebaseFirestore.getInstance()
         showWarning()
-        binding!!.loginBtn.setOnClickListener { v: View? ->
+
+        binding!!.loginBtn.setOnClickListener {
             dialog!!.setMessage("Logging In...")
             val Email = binding!!.emailEt.text.toString()
             val Password = binding!!.passwordEt.text.toString()
@@ -53,47 +56,35 @@ class Login : AppCompatActivity() {
             } else {
                 // delete notes first
                 dialog!!.show()
-                auth!!.signInWithEmailAndPassword(Email, Password)
-                    .addOnSuccessListener {
-                        Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show()
-                        if (Objects.requireNonNull(auth!!.currentUser)!!.isAnonymous) {
-                            val user = auth!!.currentUser
-                            store!!.collection(DATA.PARENT_PATH).document(user!!.uid).delete()
-                                .addOnSuccessListener {
-                                    Toast.makeText(
-                                        context,
-                                        R.string.delete_message_notes,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-
-                            // delete Temp user
-                            user.delete().addOnSuccessListener {
+                auth!!.signInWithEmailAndPassword(Email, Password).addOnSuccessListener {
+                    Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show()
+                    if (Objects.requireNonNull(auth!!.currentUser)!!.isAnonymous) {
+                        val user = auth!!.currentUser
+                        store!!.collection(DATA.PARENT_PATH).document(user!!.uid).delete()
+                            .addOnSuccessListener {
                                 Toast.makeText(
-                                    context,
-                                    R.string.delete_message_user,
-                                    Toast.LENGTH_SHORT
+                                    context, R.string.delete_message_notes, Toast.LENGTH_SHORT
                                 ).show()
                             }
+
+                        // delete Temp user
+                        user.delete().addOnSuccessListener {
+                            Toast.makeText(
+                                context, R.string.delete_message_user, Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        VOID.IntentClear(context, CLASS.HOME)
-                        finish()
-                    }.addOnFailureListener { e: Exception ->
-                        Toast.makeText(
-                            context,
-                            R.string.login_failure.toString() + e.message,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        dialog!!.dismiss()
                     }
+                    VOID.IntentClear(context, CLASS.HOME)
+                    finish()
+                }.addOnFailureListener { e: Exception ->
+                    Toast.makeText(
+                        context, R.string.login_failure.toString() + e.message, Toast.LENGTH_SHORT
+                    ).show()
+                    dialog!!.dismiss()
+                }
             }
         }
-        binding!!.forget.setOnClickListener {
-            VOID.Intent1(
-                context,
-                CLASS.FORGET_PASSWORD
-            )
-        }
+        binding!!.forget.setOnClickListener { VOID.Intent1(context, CLASS.FORGET_PASSWORD) }
         binding!!.noAccount.setOnClickListener { VOID.Intent1(context, CLASS.REGISTER) }
     }
 

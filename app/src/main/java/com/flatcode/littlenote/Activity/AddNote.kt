@@ -20,11 +20,10 @@ class AddNote : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         THEME.setThemeOfApp(context)
         super.onCreate(savedInstanceState)
-        binding = ActivityAddEditNoteBinding.inflate(
-            layoutInflater
-        )
+        binding = ActivityAddEditNoteBinding.inflate(layoutInflater)
         val view = binding!!.root
         setContentView(view)
+
         binding!!.toolbar.nameSpace.setText(R.string.add_note)
         binding!!.toolbar.image.visibility = View.VISIBLE
         binding!!.toolbar.image.setImageResource(R.drawable.ic_true)

@@ -25,12 +25,13 @@ class Splash : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         val view = binding!!.root
         setContentView(view)
+
         VOID.Logo(baseContext, binding!!.logo)
         VOID.Intro(baseContext, binding!!.background, binding!!.backWhite, binding!!.backBlack)
+
         auth = FirebaseAuth.getInstance()
         val handler = Handler()
         handler.postDelayed({
-
             // check if user is logged in
             if (auth!!.currentUser != null) {
                 VOID.Intent1(context, CLASS.HOME)
@@ -43,9 +44,7 @@ class Splash : AppCompatActivity() {
                     finish()
                 }.addOnFailureListener { e: Exception ->
                     Toast.makeText(
-                        context,
-                        R.string.error_log.toString() + e.message,
-                        Toast.LENGTH_SHORT
+                        context, R.string.error_log.toString() + e.message, Toast.LENGTH_SHORT
                     ).show()
                     finish()
                 }

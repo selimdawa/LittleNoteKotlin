@@ -28,16 +28,8 @@ object VOID {
     }
 
     fun IntentExtraDetails(
-        context: Context,
-        c: Class<*>?,
-        key: String?,
-        value: Note,
-        key2: String?,
-        value2: Note,
-        key3: String?,
-        value3: Int,
-        key4: String?,
-        value4: String?
+        context: Context, c: Class<*>?, key: String?, value: Note, key2: String?, value2: Note,
+        key3: String?, value3: Int, key4: String?, value4: String?
     ) {
         val intent = Intent(context, c)
         intent.putExtra(key, value.title)
@@ -68,8 +60,8 @@ object VOID {
         lp.copyFrom(dialog.window!!.attributes)
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-        dialog.findViewById<View>(R.id.yes).setOnClickListener { v: View? -> activity!!.finish() }
-        dialog.findViewById<View>(R.id.no).setOnClickListener { v: View? -> dialog.cancel() }
+        dialog.findViewById<View>(R.id.yes).setOnClickListener { activity!!.finish() }
+        dialog.findViewById<View>(R.id.no).setOnClickListener { dialog.cancel() }
         dialog.show()
         dialog.window!!.attributes = lp
     }

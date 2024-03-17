@@ -90,8 +90,8 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
                 val docId = noteAdapter!!.snapshots.getSnapshot(i).id
                 noteViewHolder.view.setOnClickListener {
                     VOID.IntentExtraDetails(
-                        context, CLASS.DETAILS,
-                        DATA.TITLE, note, DATA.CONTENT, note, DATA.COLOR, code, DATA.ID_PATH, docId
+                        context, CLASS.DETAILS, DATA.TITLE, note, DATA.CONTENT, note,
+                        DATA.COLOR, code, DATA.ID_PATH, docId
                     )
                 }
                 val menuIcon = noteViewHolder.view.findViewById<ImageView>(R.id.menuIcon)
@@ -116,9 +116,7 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
                             binding!!.toolbar.number.text = MessageFormat.format(" ({0})", n)
                         }.addOnFailureListener {
                             Toast.makeText(
-                                context,
-                                R.string.error_delete,
-                                Toast.LENGTH_SHORT
+                                context, R.string.error_delete, Toast.LENGTH_SHORT
                             ).show()
                         }
                         false
@@ -152,10 +150,7 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
         }
         binding!!.toolbar.logout.setOnClickListener { checkUser() }
         binding!!.toolbar.info.setOnClickListener {
-            VOID.aboutAccount(
-                context,
-                DATA.FIREBASE_USER.displayName, DATA.FIREBASE_USER.email
-            )
+            VOID.aboutAccount(context, DATA.FIREBASE_USER.displayName, DATA.FIREBASE_USER.email)
         }
     }
 

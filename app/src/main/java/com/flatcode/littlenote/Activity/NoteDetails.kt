@@ -30,17 +30,11 @@ class NoteDetails : AppCompatActivity() {
         binding!!.description.movementMethod = ScrollingMovementMethod()
         binding!!.description.text = data!!.getStringExtra(DATA.CONTENT)
         binding!!.description.setBackgroundColor(
-            resources.getColor(
-                data!!.getIntExtra(
-                    DATA.COLOR,
-                    DATA.DEFAULT_COLOR
-                ), null
-            )
+            resources.getColor(data!!.getIntExtra(DATA.COLOR, DATA.DEFAULT_COLOR), null)
         )
         binding!!.toolbar.edit.setOnClickListener {
             VOID.IntentExtraEditFormDetails(
-                context, CLASS.EDIT,
-                DATA.TITLE, data, DATA.CONTENT, data, DATA.ID_PATH, data
+                context, CLASS.EDIT, DATA.TITLE, data, DATA.CONTENT, data, DATA.ID_PATH, data
             )
         }
     }

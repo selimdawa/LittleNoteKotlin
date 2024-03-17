@@ -22,17 +22,18 @@ class ForgetPassword : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         THEME.setThemeOfApp(context)
         super.onCreate(savedInstanceState)
-        binding = ActivityForgetPasswordBinding.inflate(
-            layoutInflater
-        )
+        binding = ActivityForgetPasswordBinding.inflate(layoutInflater)
         val view = binding!!.root
         setContentView(view)
+
         VOID.Logo(baseContext, binding!!.logo)
         VOID.Intro(baseContext, binding!!.background, binding!!.backWhite, binding!!.backBlack)
+
         auth = FirebaseAuth.getInstance()
         dialog = ProgressDialog(this)
         dialog!!.setTitle("Please wait...")
         dialog!!.setCanceledOnTouchOutside(false)
+
         binding!!.noAccount.setOnClickListener {
             VOID.Intent1(context, CLASS.REGISTER)
             finish()
@@ -62,9 +63,7 @@ class ForgetPassword : AppCompatActivity() {
         auth!!.sendPasswordResetEmail(email).addOnCompleteListener {
             dialog!!.dismiss()
             Toast.makeText(
-                context,
-                "Instructions to reset password sent to $email",
-                Toast.LENGTH_SHORT
+                context, "Instructions to reset password sent to $email", Toast.LENGTH_SHORT
             ).show()
         }.addOnFailureListener { e: Exception ->
             dialog!!.dismiss()

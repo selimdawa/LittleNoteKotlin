@@ -22,17 +22,17 @@ class EditNote : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         THEME.setThemeOfApp(context)
         super.onCreate(savedInstanceState)
-        binding = ActivityAddEditNoteBinding.inflate(
-            layoutInflater
-        )
+        binding = ActivityAddEditNoteBinding.inflate(layoutInflater)
         val view = binding!!.root
         setContentView(view)
-        binding!!.toolbar.nameSpace.setText(R.string.edit_note)
-        binding!!.toolbar.image.visibility = View.VISIBLE
-        binding!!.toolbar.image.setImageResource(R.drawable.ic_true)
+
         data = intent
         val noteTitle = data!!.getStringExtra(DATA.TITLE)
         val noteContent = data!!.getStringExtra(DATA.CONTENT)
+
+        binding!!.toolbar.nameSpace.setText(R.string.edit_note)
+        binding!!.toolbar.image.visibility = View.VISIBLE
+        binding!!.toolbar.image.setImageResource(R.drawable.ic_true)
         binding!!.noteTitle.setText(noteTitle)
         binding!!.noteContent.setText(noteContent)
         binding!!.toolbar.image.setOnClickListener {
@@ -47,9 +47,7 @@ class EditNote : AppCompatActivity() {
             // save note
             val document =
                 DATA.FIREBASE_STORE.collection(DATA.PARENT_PATH).document(DATA.FirebaseUserUid)
-                    .collection(DATA.CHILD_PATH).document(
-                        data!!.getStringExtra(DATA.ID_PATH)!!
-                    )
+                    .collection(DATA.CHILD_PATH).document(data!!.getStringExtra(DATA.ID_PATH)!!)
             val note: MutableMap<String?, Any> = HashMap()
             note[DATA.TITLE] = nTitle
             note[DATA.CONTENT] = nContent
