@@ -1,8 +1,9 @@
 <h1 align="center">Little Note - Kotlin</h1>
 
 <p align="center">
-  <a href="https://android-arsenal.com/api?level=24"><img alt="API" src="https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat"/></a>
-  <a href="https://kotlinlang.org"><img alt="Kotlin" src="https://img.shields.io/badge/Kotlin-2.3.0-blue"/></a>
+  <a href="https://android-arsenal.com/api?level=24"><img alt="Min SDK" src="https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat"/></a>
+  <a href="https://android-arsenal.com/api?level=36"><img alt="Target SDK" src="https://img.shields.io/badge/API-36%2B-brightgreen.svg?style=flat"/></a> 
+ <a href="https://kotlinlang.org"><img alt="Kotlin" src="https://img.shields.io/badge/Kotlin-2.3.0-blue"/></a>
 </p>
 
 ## Day Mode
@@ -34,6 +35,6 @@ Add/Edit Note | Details | Login Note
 <a href='https://play.google.com/store/apps/details?id=com.flatcode.littlenote'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="170px"/></a>
 <br />
 
-- [Kotlin Code Version](https://github.com/selimdawa/LittleNoteKotlinOld/)
+- [Kotlin Old Code Version](https://github.com/selimdawa/LittleNoteKotlinOld/)
 
-- [Java Code Version](https://github.com/selimdawa/LittleNote/)
+- [Java Old Code Version](https://github.com/selimdawa/LittleNote/)
