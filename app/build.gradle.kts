@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.flatcode.littlenote"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.flatcode.littlenote"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 5
         versionName = "1.26"
 
@@ -38,11 +38,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        }
     }
     buildFeatures {
         dataBinding = true
@@ -50,25 +52,25 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.core:core-ktx:1.17.0")
+    implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("androidx.preference:preference-ktx:1.2.1")           //Shared Preference
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
     //Layout
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation("com.google.android.material:material:1.13.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.cardview:cardview:1.0.0")
     //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.7.4")) //Firebase BOM
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-firestore-ktx")        //Firebase Fire Store
+    implementation(platform("com.google.firebase:firebase-bom:34.7.0")) //Firebase BOM
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-firestore")        //Firebase Fire Store
     //Don't Change
-    implementation("com.firebaseui:firebase-ui-firestore:4.2.1")        //Firebase Store UI
-    //implementation("com.google.firebase:firebase-database-ktx")
-    //implementation("com.google.firebase:firebase-storage-ktx")
-    //implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.firebaseui:firebase-ui-firestore:9.1.1")        //Firebase Store UI
+    //implementation("com.google.firebase:firebase-database")
+    //implementation("com.google.firebase:firebase-storage")
+    //implementation("com.google.firebase:firebase-crashlytics")
 }
