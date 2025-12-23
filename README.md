@@ -34,4 +34,6 @@ Add/Edit Note | Details | Login Note
 <a href='https://play.google.com/store/apps/details?id=com.flatcode.littlenote'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="170px"/></a>
 <br />
 
+- [Kotlin Code Version](https://github.com/selimdawa/LittleNoteKotlinOld/)
+
 - [Java Code Version](https://github.com/selimdawa/LittleNote/)
