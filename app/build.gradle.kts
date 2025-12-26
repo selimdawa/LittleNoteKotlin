@@ -1,8 +1,7 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.gms.google-services")
-    id("kotlin-kapt")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -52,25 +51,26 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.17.0")
-    implementation("androidx.appcompat:appcompat:1.7.1")
-    implementation("androidx.preference:preference-ktx:1.2.1")           //Shared Preference
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.3.0")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.preference.ktx)           //Shared Preference
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
     //Layout
-    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
-    implementation("com.google.android.material:material:1.13.0")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.cardview:cardview:1.0.0")
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.material)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.cardview)
     //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:34.7.0")) //Firebase BOM
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-firestore")        //Firebase Fire Store
+    implementation(platform(libs.firebase.bom)) //Firebase BOM
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.firestore)        //Firebase Fire Store
     //Don't Change
-    implementation("com.firebaseui:firebase-ui-firestore:9.1.1")        //Firebase Store UI
-    //implementation("com.google.firebase:firebase-database")
-    //implementation("com.google.firebase:firebase-storage")
-    //implementation("com.google.firebase:firebase-crashlytics")
+    implementation(libs.firebase.ui.firestore)        //Firebase Store UI
+    //implementation(libs.firebase.database)
+    //implementation(libs.firebase.storage)
+    //implementation(libs.firebase.crashlytics)
 }
