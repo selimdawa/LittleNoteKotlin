@@ -6,7 +6,9 @@ plugins {
 
 android {
     namespace = "com.flatcode.littlenote"
-    compileSdk = 36
+    compileSdk {
+        version = release(36)
+    }
 
     defaultConfig {
         applicationId = "com.flatcode.littlenote"
@@ -64,12 +66,12 @@ dependencies {
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.cardview)
     //Firebase
-    implementation(platform(libs.firebase.bom)) //Firebase BOM
+    implementation(platform(libs.firebase.bom))            //Firebase BOM
     implementation(libs.firebase.auth)
     implementation(libs.firebase.analytics)
-    implementation(libs.firebase.firestore)        //Firebase Fire Store
+    implementation(libs.firebase.firestore)                //Firebase Fire Store
     //Don't Change
-    implementation(libs.firebase.ui.firestore)        //Firebase Store UI
+    implementation(libs.firebase.ui.firestore)             //Firebase Store UI
     //implementation(libs.firebase.database)
     //implementation(libs.firebase.storage)
     //implementation(libs.firebase.crashlytics)
