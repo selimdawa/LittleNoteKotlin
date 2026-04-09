@@ -1,13 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.services)
 }
 
 android {
     namespace = "com.flatcode.littlenote"
     compileSdk {
-        version = release(36)
+        version = release(36) {
+            minorApiLevel = 1
+        }
     }
 
     defaultConfig {
