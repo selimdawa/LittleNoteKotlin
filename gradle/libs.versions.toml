@@ -1,7 +1,7 @@
 [versions]
-agp = "9.1.0"
+agp = "9.2.1"
 cardview = "1.0.0"
-firebaseBom = "34.12.0"
+firebaseBom = "34.13.0"
 firebaseUiFirestore = "9.1.1"
 coreKtx = "1.18.0"
 junit = "4.13.2"
