@@ -6,15 +6,13 @@ plugins {
 android {
     namespace = "com.flatcode.littlenote"
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
+        version = release(37)
     }
 
     defaultConfig {
         applicationId = "com.flatcode.littlenote"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 6
         versionName = "1.30"
 
