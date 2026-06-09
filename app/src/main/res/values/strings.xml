@@ -39,8 +39,8 @@
     <string name="description_here">Description Here</string>
     <string name="title_here">Title Here</string>
     //Theme
-    <string name="one_theme">Day Mode</string>
-    <string name="night_theme">Night Mode</string>
+    <string name="basic_theme">Basic Theme</string>
+    <string name="sec_theme">Sec Theme</string>
     //Close App
     <string name="do_you_want_to_exit">Do you want to Exit ?</string>
     <string name="no">NO</string>
