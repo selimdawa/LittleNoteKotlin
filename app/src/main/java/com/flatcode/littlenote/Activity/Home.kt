@@ -57,13 +57,6 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
             .replace(R.id.settings, SettingFragment())
             .commit()
         // Color Mode -------------------------------- End
-        val sharedPreferences = PreferenceManager
-            .getDefaultSharedPreferences(baseContext)
-        if (sharedPreferences.getString(DATA.COLOR_OPTION, "ONE") == "ONE") {
-            binding!!.toolbar.mode.setBackgroundResource(R.drawable.sun)
-        } else if (sharedPreferences.getString(DATA.COLOR_OPTION, "NIGHT_ONE") == "NIGHT_ONE") {
-            binding!!.toolbar.mode.setBackgroundResource(R.drawable.moon)
-        }
 
         if (DATA.FIREBASE_USER!!.isAnonymous) {
             binding!!.toolbar.info.visibility = View.GONE
