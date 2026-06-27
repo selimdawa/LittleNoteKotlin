@@ -5,25 +5,16 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Build
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.flatcode.littlenote.Adapter.NoteAdapter
 import com.flatcode.littlenote.Model.Note
 import com.flatcode.littlenote.R
 import com.flatcode.littlenote.Unit.CLASS
@@ -40,7 +31,7 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
     private var _binding: ActivityHomeBinding? = null
     private val binding get() = _binding!!
 
-    var noteAdapter: FirestoreRecyclerAdapter<Note, NoteViewHolder>? = null
+    var noteAdapter: NoteAdapter? = null
     private val context: Context get() = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,55 +69,8 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
             .setQuery(query, Note::class.java)
             .build()
 
-        noteAdapter = object : FirestoreRecyclerAdapter<Note, NoteViewHolder>(allNotes) {
-            override fun onBindViewHolder(noteViewHolder: NoteViewHolder, i: Int, note: Note) {
-                noteViewHolder.title.text = note.title
-                noteViewHolder.description.text = note.content
-
-                val code = DATA.randomColor
-                noteViewHolder.card.setCardBackgroundColor(ContextCompat.getColor(context, code))
-
-                val docId = snapshots.getSnapshot(i).id
-                noteViewHolder.view.setOnClickListener {
-                    VOID.IntentExtraDetails(
-                        context, CLASS.DETAILS, DATA.TITLE, note, DATA.CONTENT, note,
-                        DATA.COLOR, code, DATA.ID_PATH, docId
-                    )
-                }
-
-                val menuIcon = noteViewHolder.view.findViewById<ImageView>(R.id.menuIcon)
-                menuIcon.setOnClickListener { v: View ->
-                    val docId1 = snapshots.getSnapshot(i).id
-                    val menu = PopupMenu(v.context, v)
-                    menu.gravity = Gravity.END
-                    menu.menu.add(DATA.EDIT).setOnMenuItemClickListener {
-                        VOID.IntentExtraDetails(
-                            context, CLASS.EDIT,
-                            DATA.TITLE, note, DATA.CONTENT, note, null, 0, DATA.ID_PATH, docId
-                        )
-                        false
-                    }
-                    menu.menu.add(DATA.DELETE).setOnMenuItemClickListener {
-                        val docRef = DATA.FIREBASE_STORE.collection(DATA.PARENT_PATH)
-                            .document(DATA.FirebaseUserUid).collection(DATA.CHILD_PATH)
-                            .document(docId1)
-                        docRef.delete().addOnSuccessListener {
-                            binding.toolbar.number.text = MessageFormat.format(" ({0})", itemCount)
-                        }.addOnFailureListener {
-                            showToast(getString(R.string.error_delete))
-                        }
-                        false
-                    }
-                    menu.show()
-                }
-                binding.toolbar.number.text = MessageFormat.format(" ({0})", itemCount)
-            }
-
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-                val view =
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
-                return NoteViewHolder(view)
-            }
+        noteAdapter = NoteAdapter(context, allNotes) { count ->
+            binding.toolbar.number.text = MessageFormat.format(" ({0})", count)
         }
 
         binding.recyclerView.layoutManager =
@@ -184,14 +128,7 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
                         applyTransition()
                         finish()
                     }
-            }
-            .show()
-    }
-
-    class NoteViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.title)
-        val description: TextView = view.findViewById(R.id.description)
-        val card: CardView = view.findViewById(R.id.card)
+            }.show()
     }
 
     override fun onStart() {
