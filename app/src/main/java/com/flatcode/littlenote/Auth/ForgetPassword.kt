@@ -1,10 +1,10 @@
 package com.flatcode.littlenote.Auth
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.flatcode.littlenote.Unit.CLASS
 import com.flatcode.littlenote.Unit.THEME
@@ -14,58 +14,81 @@ import com.google.firebase.auth.FirebaseAuth
 
 class ForgetPassword : AppCompatActivity() {
 
-    private var binding: ActivityForgetPasswordBinding? = null
+    private var _binding: ActivityForgetPasswordBinding? = null
+    private val binding get() = _binding!!
+
     private val context: Context = this@ForgetPassword
-    private var auth: FirebaseAuth? = null
-    private var dialog: ProgressDialog? = null
+    private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+
+    private val progressDialog: AlertDialog by lazy {
+        AlertDialog.Builder(context)
+            .setTitle("Please wait...")
+            .setView(android.widget.ProgressBar(context).apply {
+                setPadding(50, 50, 50, 50)
+            })
+            .setCancelable(false)
+            .create()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         THEME.setThemeOfApp(context)
         super.onCreate(savedInstanceState)
-        binding = ActivityForgetPasswordBinding.inflate(layoutInflater)
-        val view = binding!!.root
-        setContentView(view)
 
-        auth = FirebaseAuth.getInstance()
-        dialog = ProgressDialog(this)
-        dialog!!.setTitle("Please wait...")
-        dialog!!.setCanceledOnTouchOutside(false)
+        _binding = ActivityForgetPasswordBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        binding!!.noAccount.setOnClickListener {
+        binding.noAccount.setOnClickListener {
             VOID.Intent1(context, CLASS.REGISTER)
             finish()
         }
-        binding!!.login.setOnClickListener {
+
+        binding.login.setOnClickListener {
             VOID.Intent1(context, CLASS.LOGIN)
             finish()
         }
-        binding!!.go.setOnClickListener { validateDate() }
+
+        binding.go.setOnClickListener { validateData() }
     }
 
-    private var email = ""
-    private fun validateDate() {
-        email = binding!!.emailEt.text.toString().trim { it <= ' ' }
-        if (email.isEmpty()) {
-            Toast.makeText(context, "Enter email...!", Toast.LENGTH_SHORT).show()
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(context, "Invalid email format...!", Toast.LENGTH_SHORT).show()
-        } else {
-            recoverPassword()
+    private fun validateData() {
+        val email = binding.emailEt.text.toString().trim()
+
+        when {
+            email.isEmpty() -> {
+                showToast("Enter email...!")
+            }
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                showToast("Invalid email format...!")
+            }
+            else -> {
+                recoverPassword(email)
+            }
         }
     }
 
-    private fun recoverPassword() {
-        dialog!!.setMessage("Sending password recovery to instructions to $email")
-        dialog!!.show()
-        auth!!.sendPasswordResetEmail(email).addOnCompleteListener {
-            dialog!!.dismiss()
-            Toast.makeText(
-                context, "Instructions to reset password sent to $email", Toast.LENGTH_SHORT
-            ).show()
-        }.addOnFailureListener { e: Exception ->
-            dialog!!.dismiss()
-            Toast.makeText(context, "Failed to send to due to " + e.message, Toast.LENGTH_SHORT)
-                .show()
-        }
+    private fun recoverPassword(email: String) {
+        progressDialog.setMessage("Sending password recovery instructions to $email")
+        progressDialog.show()
+
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                progressDialog.dismiss()
+                if (task.isSuccessful) {
+                    showToast("Instructions to reset password sent to $email")
+                }
+            }
+            .addOnFailureListener { e ->
+                progressDialog.dismiss()
+                showToast("Failed to send due to ${e.message}")
+            }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

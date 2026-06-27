@@ -1,8 +1,6 @@
 package com.flatcode.littlenote.Auth
 
-import android.app.ProgressDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -14,86 +12,90 @@ import com.flatcode.littlenote.Unit.THEME
 import com.flatcode.littlenote.Unit.VOID
 import com.flatcode.littlenote.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.Objects
 
 class Login : AppCompatActivity() {
 
-    private var binding: ActivityLoginBinding? = null
-    var auth: FirebaseAuth? = null
-    var store: FirebaseFirestore? = null
-    var user: FirebaseUser? = null
-    private var dialog: ProgressDialog? = null
+    private var _binding: ActivityLoginBinding? = null
+    private val binding get() = _binding!!
+
     private val context: Context = this@Login
+    private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private val store: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
+
+    private val progressDialog: AlertDialog by lazy {
+        AlertDialog.Builder(context)
+            .setTitle("Please wait...")
+            .setView(android.widget.ProgressBar(context).apply {
+                setPadding(50, 50, 50, 50)
+            })
+            .setCancelable(false)
+            .create()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         THEME.setThemeOfApp(context)
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        val view = binding!!.root
-        setContentView(view)
+        _binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        dialog = ProgressDialog(this)
-        dialog!!.setTitle("Please wait...")
-        dialog!!.setCanceledOnTouchOutside(false)
-
-        user = FirebaseAuth.getInstance().currentUser
-        auth = FirebaseAuth.getInstance()
-        store = FirebaseFirestore.getInstance()
         showWarning()
 
-        binding!!.loginBtn.setOnClickListener {
-            dialog!!.setMessage("Logging In...")
-            val Email = binding!!.emailEt.text.toString()
-            val Password = binding!!.passwordEt.text.toString()
-            if (Email.isEmpty() || Password.isEmpty()) {
-                Toast.makeText(context, R.string.empty_required, Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            } else {
-                // delete notes first
-                dialog!!.show()
-                auth!!.signInWithEmailAndPassword(Email, Password).addOnSuccessListener {
-                    Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show()
-                    if (Objects.requireNonNull(auth!!.currentUser)!!.isAnonymous) {
-                        val user = auth!!.currentUser
-                        store!!.collection(DATA.PARENT_PATH).document(user!!.uid).delete()
-                            .addOnSuccessListener {
-                                Toast.makeText(
-                                    context, R.string.delete_message_notes, Toast.LENGTH_SHORT
-                                ).show()
-                            }
+        binding.loginBtn.setOnClickListener {
+            progressDialog.setMessage("Logging In...")
+            val email = binding.emailEt.text.toString()
+            val password = binding.passwordEt.text.toString()
 
-                        // delete Temp user
-                        user.delete().addOnSuccessListener {
-                            Toast.makeText(
-                                context, R.string.delete_message_user, Toast.LENGTH_SHORT
-                            ).show()
+            if (email.isEmpty() || password.isEmpty()) {
+                showToast(getString(R.string.empty_required))
+                return@setOnClickListener
+            }
+
+            progressDialog.show()
+            auth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
+                showToast(getString(R.string.login_success))
+
+                val currentUser = auth.currentUser
+                if (currentUser != null && currentUser.isAnonymous) {
+                    store.collection(DATA.PARENT_PATH).document(currentUser.uid).delete()
+                        .addOnSuccessListener {
+                            showToast(getString(R.string.delete_message_notes))
                         }
+
+                    currentUser.delete().addOnSuccessListener {
+                        showToast(getString(R.string.delete_message_user))
                     }
-                    VOID.IntentClear(context, CLASS.HOME)
-                    finish()
-                }.addOnFailureListener { e: Exception ->
-                    Toast.makeText(
-                        context, R.string.login_failure.toString() + e.message, Toast.LENGTH_SHORT
-                    ).show()
-                    dialog!!.dismiss()
                 }
+                VOID.IntentClear(context, CLASS.HOME)
+                finish()
+            }.addOnFailureListener { e: Exception ->
+                showToast("${getString(R.string.login_failure)}${e.message}")
+                progressDialog.dismiss()
             }
         }
-        binding!!.forget.setOnClickListener { VOID.Intent1(context, CLASS.FORGET_PASSWORD) }
-        binding!!.noAccount.setOnClickListener { VOID.Intent1(context, CLASS.REGISTER) }
+
+        binding.forget.setOnClickListener { VOID.Intent1(context, CLASS.FORGET_PASSWORD) }
+        binding.noAccount.setOnClickListener { VOID.Intent1(context, CLASS.REGISTER) }
     }
 
     private fun showWarning() {
-        val warning = AlertDialog.Builder(context)
+        AlertDialog.Builder(context)
             .setTitle(R.string.alert_delete_title)
             .setMessage(R.string.alert_login_message)
-            .setPositiveButton(R.string.alert_login_positive) { dialog: DialogInterface?, which: Int ->
+            .setPositiveButton(R.string.alert_login_positive) { _, _ ->
                 VOID.Intent1(context, CLASS.REGISTER)
                 finish()
             }
-            .setNegativeButton(R.string.alert_login_negative) { dialog: DialogInterface?, which: Int -> }
-        warning.show()
+            .setNegativeButton(R.string.alert_login_negative) { _, _ -> }
+            .show()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

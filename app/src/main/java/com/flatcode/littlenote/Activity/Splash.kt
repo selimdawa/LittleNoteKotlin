@@ -1,8 +1,10 @@
 package com.flatcode.littlenote.Activity
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.flatcode.littlenote.R
@@ -11,41 +13,51 @@ import com.flatcode.littlenote.Unit.DATA
 import com.flatcode.littlenote.Unit.THEME
 import com.flatcode.littlenote.Unit.VOID
 import com.flatcode.littlenote.databinding.ActivitySplashBinding
-import com.google.firebase.auth.FirebaseAuth
 
 class Splash : AppCompatActivity() {
 
-    private var binding: ActivitySplashBinding? = null
-    var auth: FirebaseAuth? = null
+    private var _binding: ActivitySplashBinding? = null
+    private val binding get() = _binding!!
     private val context: Context = this@Splash
 
     override fun onCreate(savedInstanceState: Bundle?) {
         THEME.setThemeOfApp(context)
         super.onCreate(savedInstanceState)
-        binding = ActivitySplashBinding.inflate(layoutInflater)
-        val view = binding!!.root
-        setContentView(view)
+        _binding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        auth = FirebaseAuth.getInstance()
-        val handler = Handler()
-        handler.postDelayed({
-            // check if user is logged in
-            if (auth!!.currentUser != null) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            val currentUser = DATA.FIREBASE_USER
+            if (currentUser != null) {
                 VOID.Intent1(context, CLASS.HOME)
+                applyTransition()
                 finish()
             } else {
-                // create new anonymous account
-                auth!!.signInAnonymously().addOnSuccessListener {
+                DATA.AUTH.signInAnonymously().addOnSuccessListener {
                     Toast.makeText(context, R.string.temporary_log, Toast.LENGTH_LONG).show()
                     VOID.Intent1(context, CLASS.HOME)
+                    applyTransition()
                     finish()
                 }.addOnFailureListener { e: Exception ->
-                    Toast.makeText(
-                        context, R.string.error_log.toString() + e.message, Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(context, "${getString(R.string.error_log)}${e.message}", Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
         }, DATA.DELAY_LOG.toLong())
+    }
+
+    private fun applyTransition() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(
+                OVERRIDE_TRANSITION_OPEN,
+                R.anim.slide_up,
+                R.anim.slide_down
+            )
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
