@@ -1,8 +1,6 @@
-package com.flatcode.littlenote.Activity
+package com.flatcode.littlenote.activity
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -10,23 +8,20 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.flatcode.littlenote.Adapter.NoteAdapter
-import com.flatcode.littlenote.Model.Note
+import com.flatcode.littlenote.adapter.NoteAdapter
+import com.flatcode.littlenote.model.Note
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.Unit.CLASS
-import com.flatcode.littlenote.Unit.DATA
-import com.flatcode.littlenote.Unit.THEME
-import com.flatcode.littlenote.Unit.VOID
+import com.flatcode.littlenote.utils.CLASS
+import com.flatcode.littlenote.utils.DATA
+import com.flatcode.littlenote.utils.VOID
 import com.flatcode.littlenote.databinding.ActivityHomeBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import java.text.MessageFormat
 
-class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
+class Home : AppCompatActivity() {
 
     private var _binding: ActivityHomeBinding? = null
     private val binding get() = _binding!!
@@ -35,9 +30,6 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
     private val context: Context get() = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        PreferenceManager.getDefaultSharedPreferences(baseContext)
-            .registerOnSharedPreferenceChangeListener(this)
-        THEME.setThemeOfApp(context)
         super.onCreate(savedInstanceState)
         _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -47,11 +39,6 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
                 VOID.closeApp(context, this@Home)
             }
         })
-
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.settings, SettingFragment())
-            .commit()
 
         val firebaseUser = DATA.FIREBASE_USER
         if (firebaseUser != null && firebaseUser.isAnonymous) {
@@ -141,10 +128,6 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
         noteAdapter?.stopListening()
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (key == DATA.COLOR_OPTION) recreate()
-    }
-
     private fun applyTransition() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             overrideActivityTransition(
@@ -161,14 +144,6 @@ class Home : AppCompatActivity(), OnSharedPreferenceChangeListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        PreferenceManager.getDefaultSharedPreferences(baseContext)
-            .unregisterOnSharedPreferenceChangeListener(this)
         _binding = null
-    }
-
-    class SettingFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.root_preferences, rootKey)
-        }
     }
 }

@@ -1,13 +1,13 @@
-package com.flatcode.littlenote.Unit
+package com.flatcode.littlenote.utils
 
-import com.flatcode.littlenote.Activity.AddNote
-import com.flatcode.littlenote.Activity.EditNote
-import com.flatcode.littlenote.Activity.Home
-import com.flatcode.littlenote.Activity.NoteDetails
-import com.flatcode.littlenote.Activity.Splash
-import com.flatcode.littlenote.Auth.ForgetPassword
-import com.flatcode.littlenote.Auth.Login
-import com.flatcode.littlenote.Auth.Register
+import com.flatcode.littlenote.activity.AddNote
+import com.flatcode.littlenote.activity.EditNote
+import com.flatcode.littlenote.activity.Home
+import com.flatcode.littlenote.activity.NoteDetails
+import com.flatcode.littlenote.activity.Splash
+import com.flatcode.littlenote.auth.ForgetPassword
+import com.flatcode.littlenote.auth.Login
+import com.flatcode.littlenote.auth.Register
 
 object CLASS {
     val HOME: Class<Home> = Home::class.java

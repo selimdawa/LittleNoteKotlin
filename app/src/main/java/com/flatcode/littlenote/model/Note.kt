@@ -1,4 +1,4 @@
-package com.flatcode.littlenote.Model
+package com.flatcode.littlenote.model
 
 data class Note(
     var title: String? = null,

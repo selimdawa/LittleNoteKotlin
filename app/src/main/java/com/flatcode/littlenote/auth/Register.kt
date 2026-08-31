@@ -1,4 +1,4 @@
-package com.flatcode.littlenote.Auth
+package com.flatcode.littlenote.auth
 
 import android.content.Context
 import android.os.Build
@@ -7,10 +7,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.Unit.CLASS
-import com.flatcode.littlenote.Unit.DATA
-import com.flatcode.littlenote.Unit.THEME
-import com.flatcode.littlenote.Unit.VOID
+import com.flatcode.littlenote.utils.CLASS
+import com.flatcode.littlenote.utils.DATA
+import com.flatcode.littlenote.utils.VOID
 import com.flatcode.littlenote.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -35,7 +34,6 @@ class Register : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        THEME.setThemeOfApp(context)
         super.onCreate(savedInstanceState)
         _binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -1,4 +1,4 @@
-package com.flatcode.littlenote.Activity
+package com.flatcode.littlenote.activity
 
 import android.content.Context
 import android.os.Build
@@ -8,10 +8,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.Unit.CLASS
-import com.flatcode.littlenote.Unit.DATA
-import com.flatcode.littlenote.Unit.THEME
-import com.flatcode.littlenote.Unit.VOID
+import com.flatcode.littlenote.utils.CLASS
+import com.flatcode.littlenote.utils.DATA
+import com.flatcode.littlenote.utils.VOID
 import com.flatcode.littlenote.databinding.ActivityNoteDetailsBinding
 
 class NoteDetails : AppCompatActivity() {
@@ -21,7 +20,6 @@ class NoteDetails : AppCompatActivity() {
     private val context: Context = this@NoteDetails
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        THEME.setThemeOfApp(context)
         super.onCreate(savedInstanceState)
         _binding = ActivityNoteDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -1,4 +1,4 @@
-package com.flatcode.littlenote.Unit
+package com.flatcode.littlenote.utils
 
 import android.app.Activity
 import android.app.Dialog
@@ -9,7 +9,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
-import com.flatcode.littlenote.Model.Note
+import com.flatcode.littlenote.model.Note
 import com.flatcode.littlenote.R
 
 object VOID {

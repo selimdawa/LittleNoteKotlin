@@ -1,16 +1,5 @@
 <resources>
-    <!-- LightMode Preference -->
-    <string-array name="reply_entries">
-        <item>@string/basic_theme</item>
-        <!--<item>@string/sec_theme</item>-->
-    </string-array>
-
-    <string-array name="reply_values">
-        <item>BASIC</item>
-        <!--<item>Sec</item>-->
-    </string-array>
-
-  <array name="note_colors">
+    <array name="note_colors">
         <item>@color/color1</item>
         <item>@color/color2</item>
         <item>@color/color3</item>
@@ -119,5 +108,4 @@
         <item>@color/color106</item>
         <item>@color/color107</item>
     </array>
-
 </resources>

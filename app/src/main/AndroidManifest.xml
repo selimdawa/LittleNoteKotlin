@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="all">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".Application"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,11 +14,10 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo_icon"
         android:supportsRtl="false"
-        android:theme="@style/Base.Theme.MainApp"
-        android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        android:theme="@style/Theme.MC.S1"
+        android:usesCleartextTraffic="true">
         <activity
-            android:name=".Activity.Splash"
+            android:name=".activity.Splash"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -27,35 +28,31 @@
         </activity>
 
         <activity
-            android:name=".Auth.Register"
+            android:name=".auth.Register"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Auth.Login"
+            android:name=".auth.Login"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Auth.ForgetPassword"
+            android:name=".auth.ForgetPassword"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.EditNote"
+            android:name=".activity.EditNote"
             android:screenOrientation="portrait" />
-
         <activity
-            android:name=".Activity.AddNote"
+            android:name=".activity.AddNote"
             android:label="@string/title_activity_add_note"
-            android:parentActivityName=".Activity.Home"
+            android:parentActivityName=".activity.Home"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activity.Home" />
+                android:value=".activity.Home" />
         </activity>
-
         <activity
-            android:name=".Activity.NoteDetails"
+            android:name=".activity.NoteDetails"
             android:label="@string/title_activity_note_details"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.Home">
-
-        </activity>
+        <activity android:name=".activity.Home"></activity>
 
     </application>
 

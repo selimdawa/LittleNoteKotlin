@@ -1,4 +1,4 @@
-package com.flatcode.littlenote.Activity
+package com.flatcode.littlenote.activity
 
 import android.content.Context
 import android.os.Build
@@ -8,8 +8,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.Unit.DATA
-import com.flatcode.littlenote.Unit.THEME
+import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.databinding.ActivityAddEditNoteBinding
 
 class EditNote : AppCompatActivity() {
@@ -19,7 +18,6 @@ class EditNote : AppCompatActivity() {
     private val context: Context = this@EditNote
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        THEME.setThemeOfApp(context)
         super.onCreate(savedInstanceState)
         _binding = ActivityAddEditNoteBinding.inflate(layoutInflater)
         setContentView(binding.root)

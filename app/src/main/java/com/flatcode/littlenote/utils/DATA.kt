@@ -1,4 +1,4 @@
-package com.flatcode.littlenote.Unit
+package com.flatcode.littlenote.utils
 
 import com.flatcode.littlenote.R
 import com.google.firebase.FirebaseApp

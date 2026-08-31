@@ -1,4 +1,4 @@
-package com.flatcode.littlenote.Adapter
+package com.flatcode.littlenote.adapter
 
 import android.content.Context
 import android.view.Gravity
@@ -9,10 +9,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.flatcode.littlenote.Model.Note
-import com.flatcode.littlenote.Unit.CLASS
-import com.flatcode.littlenote.Unit.DATA
-import com.flatcode.littlenote.Unit.VOID
+import com.flatcode.littlenote.model.Note
+import com.flatcode.littlenote.utils.CLASS
+import com.flatcode.littlenote.utils.DATA
+import com.flatcode.littlenote.utils.VOID
 import com.flatcode.littlenote.databinding.ItemNoteBinding
 
 class NoteAdapter(
