@@ -7,8 +7,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.view.Window
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
+import coil.load
 import com.flatcode.littlenote.model.Note
 import com.flatcode.littlenote.R
 
@@ -70,6 +72,36 @@ object VOID {
             dialog.findViewById<TextView>(R.id.no)?.setOnClickListener { dialog.cancel() }
             dialog.show()
             win.attributes = lp
+        }
+    }
+
+    fun Glide(isUser: Boolean, context: Context?, Url: String?, Image: ImageView) {
+        try {
+            if (Url == DATA.BASIC) {
+                Image.setImageResource(if (isUser) R.drawable.basic_user else R.drawable.basic_user)
+            } else {
+                Image.load(Url) {
+                    placeholder(R.color.image_profile)
+                    crossfade(true)
+                }
+            }
+        } catch (e: Exception) {
+            Image.setImageResource(R.drawable.basic_user)
+        }
+    }
+
+    fun GlideBlur(isUser: Boolean, context: Context?, Url: String?, Image: ImageView, level: Int) {
+        try {
+            if (Url == DATA.BASIC) {
+                Image.setImageResource(if (isUser) R.drawable.basic_user else R.drawable.basic_user)
+            } else {
+                Image.load(Url) {
+                    placeholder(R.color.image_profile)
+                    transformations(SimpleBlurTransformation(level.toFloat()))
+                }
+            }
+        } catch (e: Exception) {
+            Image.setImageResource(R.drawable.basic_user)
         }
     }
 

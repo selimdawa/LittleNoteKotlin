@@ -65,6 +65,8 @@ dependencies {
     //Layout
     implementation(libs.material)
     implementation(libs.multicolors)
+    //Image
+    implementation(libs.coil)
     //Firebase
     implementation(platform(libs.firebase.bom))            //Firebase BOM
     implementation(libs.firebase.auth)
