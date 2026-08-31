@@ -13,34 +13,42 @@
         android:icon="@drawable/logo_icon"
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo_icon"
-        android:supportsRtl="false"
-        android:theme="@style/Theme.MC.S1"
-        android:usesCleartextTraffic="true">
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MC.S1">
+
         <activity
             android:name=".activity.Splash"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".auth.Register"
+            android:exported="false"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".auth.Login"
+            android:exported="false"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".auth.ForgetPassword"
+            android:exported="false"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.EditNote"
+            android:exported="false"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.AddNote"
+            android:exported="false"
             android:label="@string/title_activity_add_note"
             android:parentActivityName=".activity.Home"
             android:screenOrientation="portrait">
@@ -48,11 +56,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Home" />
         </activity>
+
         <activity
             android:name=".activity.NoteDetails"
+            android:exported="false"
             android:label="@string/title_activity_note_details"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.Home"></activity>
+
+        <activity
+            android:name=".activity.Home"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
     </application>
 
