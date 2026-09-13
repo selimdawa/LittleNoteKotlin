@@ -1,7 +1,7 @@
 [versions]
 agp = "9.4.0"
 coil = "2.7.0"
-kotlin = "2.4.10"
+kotlin = "2.4.20"
 firebaseBom = "34.18.0"
 firebaseUiFirestore = "9.1.1"
 coreKtx = "1.19.0"
