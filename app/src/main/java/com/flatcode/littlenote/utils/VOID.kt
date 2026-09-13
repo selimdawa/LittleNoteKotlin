@@ -10,7 +10,12 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
-import coil.load
+import android.graphics.drawable.ColorDrawable
+import androidx.core.content.ContextCompat
+import coil3.asImage
+import coil3.load
+import coil3.request.crossfade
+import coil3.request.transformations
 import com.flatcode.littlenote.model.Note
 import com.flatcode.littlenote.R
 
@@ -78,30 +83,30 @@ object VOID {
     fun Glide(isUser: Boolean, context: Context?, Url: String?, Image: ImageView) {
         try {
             if (Url == DATA.BASIC) {
-                Image.setImageResource(if (isUser) R.drawable.basic_user else R.drawable.basic_user)
+                Image.setImageResource(if (isUser) R.drawable.ic_person else R.drawable.ic_person)
             } else {
                 Image.load(Url) {
-                    placeholder(R.color.image_profile)
+                    placeholder(ColorDrawable(ContextCompat.getColor(Image.context, R.color.image_profile)).asImage())
                     crossfade(true)
                 }
             }
         } catch (e: Exception) {
-            Image.setImageResource(R.drawable.basic_user)
+            Image.setImageResource(R.drawable.ic_person)
         }
     }
 
     fun GlideBlur(isUser: Boolean, context: Context?, Url: String?, Image: ImageView, level: Int) {
         try {
             if (Url == DATA.BASIC) {
-                Image.setImageResource(if (isUser) R.drawable.basic_user else R.drawable.basic_user)
+                Image.setImageResource(if (isUser) R.drawable.ic_person else R.drawable.ic_person)
             } else {
                 Image.load(Url) {
-                    placeholder(R.color.image_profile)
+                    placeholder(ColorDrawable(ContextCompat.getColor(Image.context, R.color.image_profile)).asImage())
                     transformations(SimpleBlurTransformation(level.toFloat()))
                 }
             }
         } catch (e: Exception) {
-            Image.setImageResource(R.drawable.basic_user)
+            Image.setImageResource(R.drawable.ic_person)
         }
     }
 

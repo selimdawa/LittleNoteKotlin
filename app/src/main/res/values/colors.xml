@@ -13,6 +13,7 @@
     <color name="gradient">#00B8D4</color>
     <color name="gradient_2">#0097A7</color>
     <color name="overlay_dark_20">#33000000</color>
+    <color name="image_profile">#E0E0E0</color>
 
     //Card Colors
     <color name="color1">#8FFFFFF0</color>

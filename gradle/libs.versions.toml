@@ -1,6 +1,6 @@
 [versions]
 agp = "9.4.0"
-coil = "2.7.0"
+coil = "3.6.2"
 kotlin = "2.4.20"
 firebaseBom = "34.18.0"
 firebaseUiFirestore = "9.1.1"
@@ -13,7 +13,7 @@ material = "1.14.0"
 activity = "1.13.0"
 datastore = "1.2.1"
 googleServices= "4.5.0"
-multicolors = "1.0.8-beta3"
+multicolors = "1.0.10"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -29,7 +29,8 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+coil3-main = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
+coil3-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 kgp = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 multicolors = { module = "com.github.selimdawa:MultiColors", version.ref = "multicolors" }
 
