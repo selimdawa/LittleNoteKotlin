@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -74,4 +76,23 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.firestore)                //Firebase Fire Store
     implementation(libs.firebase.ui.firestore)             //Firebase Store UI
+    // Architecture Components & MVVM
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    // Hilt (Dependency Injection)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    // Navigation Component
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    // Room Database
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    //Other
+    implementation(libs.timber)
 }

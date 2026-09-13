@@ -2,7 +2,7 @@
 agp = "9.4.0"
 coil = "3.6.2"
 kotlin = "2.4.20"
-firebaseBom = "34.18.0"
+firebaseBom = "34.19.0"
 firebaseUiFirestore = "9.1.1"
 coreKtx = "1.19.0"
 junit = "4.13.2"
@@ -14,6 +14,13 @@ activity = "1.13.0"
 datastore = "1.2.1"
 googleServices= "4.5.0"
 multicolors = "1.0.10"
+lifecycle = "2.11.0"
+hilt = "2.60.1"
+coroutines = "1.11.0"
+timber = "5.0.1"
+navigation = "2.10.1"
+room = "2.8.5"
+ksp = "2.3.11"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,7 +40,22 @@ coil3-main = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coil3-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 kgp = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 multicolors = { module = "com.github.selimdawa:MultiColors", version.ref = "multicolors" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
