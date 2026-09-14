@@ -1,4 +1,4 @@
-package com.flatcode.littlenote.activity
+package com.flatcode.littlenote.ui.home
 
 import android.content.Context
 import android.os.Build
@@ -6,28 +6,36 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.flatcode.littlenote.adapter.NoteAdapter
-import com.flatcode.littlenote.model.Note
 import com.flatcode.littlenote.R
+import com.flatcode.littlenote.data.model.Note
+import com.flatcode.littlenote.databinding.ActivityHomeBinding
+import com.flatcode.littlenote.ui.adapter.NoteAdapter
 import com.flatcode.littlenote.utils.CLASS
 import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.utils.VOID
-import com.flatcode.littlenote.databinding.ActivityHomeBinding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.Query
+import com.flatcode.littlenote.viewmodel.AuthViewModel
+import com.flatcode.littlenote.viewmodel.HomeViewModel
+import com.flatcode.littlenote.viewmodel.NoteViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.MessageFormat
 
-class Home : AppCompatActivity() {
+@AndroidEntryPoint
+class HomeActivity : AppCompatActivity() {
 
     private var _binding: ActivityHomeBinding? = null
     private val binding get() = _binding!!
 
-    var noteAdapter: NoteAdapter? = null
+    private var noteAdapter: NoteAdapter? = null
     private val context: Context get() = this
+
+    private val homeViewModel: HomeViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
+    private val noteViewModel: NoteViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,12 +44,18 @@ class Home : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                VOID.closeApp(context, this@Home)
+                VOID.closeApp(context, this@HomeActivity)
             }
         })
 
-        val firebaseUser = DATA.FIREBASE_USER
-        if (firebaseUser != null && firebaseUser.isAnonymous) {
+        setupToolbar()
+        setupRecyclerView()
+        observeViewModels()
+    }
+
+    private fun setupToolbar() {
+        val currentUser = homeViewModel.currentUser
+        if (currentUser != null && currentUser.isAnonymous) {
             binding.toolbar.info.visibility = View.GONE
             binding.toolbar.sync.visibility = View.VISIBLE
         } else {
@@ -49,24 +63,8 @@ class Home : AppCompatActivity() {
             binding.toolbar.sync.visibility = View.GONE
         }
 
-        val query = DATA.FIREBASE_STORE.collection(DATA.PARENT_PATH).document(DATA.FirebaseUserUid)
-            .collection(DATA.CHILD_PATH).orderBy(DATA.TITLE, Query.Direction.DESCENDING)
-
-        val allNotes = FirestoreRecyclerOptions.Builder<Note>()
-            .setQuery(query, Note::class.java)
-            .build()
-
-        noteAdapter = NoteAdapter(context, allNotes) { count ->
-            binding.toolbar.number.text = MessageFormat.format(" ({0})", count)
-        }
-
-        binding.recyclerView.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        binding.recyclerView.adapter = noteAdapter
-
         binding.toolbar.sync.setOnClickListener {
-            val userSync = DATA.FIREBASE_USER
-            if (userSync != null && userSync.isAnonymous) {
+            if (currentUser != null && currentUser.isAnonymous) {
                 VOID.Intent1(context, CLASS.LOGIN)
                 applyTransition()
             } else {
@@ -81,19 +79,54 @@ class Home : AppCompatActivity() {
 
         binding.toolbar.logout.setOnClickListener { checkUser() }
         binding.toolbar.info.setOnClickListener {
-            val userClick = DATA.FIREBASE_USER
-            if (userClick != null) {
-                VOID.aboutAccount(context, userClick.displayName, userClick.email)
+            currentUser?.let {
+                VOID.aboutAccount(context, it.displayName, it.email)
+            }
+        }
+    }
+
+    private fun setupRecyclerView() {
+        val query = homeViewModel.getNotesQuery() ?: return
+
+        val options = FirestoreRecyclerOptions.Builder<Note>()
+            .setQuery(query, Note::class.java)
+            .build()
+
+        noteAdapter = NoteAdapter(context, options, { count ->
+            binding.toolbar.number.text = MessageFormat.format(" ({0})", count)
+        }, { docId ->
+            noteViewModel.deleteNote(docId)
+        })
+
+        binding.recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.recyclerView.adapter = noteAdapter
+    }
+
+    private fun observeViewModels() {
+        noteViewModel.noteStatus.observe(this) { result ->
+            if (result is NoteViewModel.NoteResult.Success) {
+                showToast(result.message)
+            } else if (result is NoteViewModel.NoteResult.Error) {
+                showToast(result.message)
+            }
+        }
+
+        authViewModel.authStatus.observe(this) { result ->
+            if (result is AuthViewModel.AuthResult.Success && result.message == "User deleted") {
+                VOID.Intent1(context, CLASS.SPLASH)
+                applyTransition()
+                finish()
             }
         }
     }
 
     private fun checkUser() {
-        val firebaseUser = DATA.FIREBASE_USER
-        if (firebaseUser != null && firebaseUser.isAnonymous) {
+        val currentUser = homeViewModel.currentUser
+        if (currentUser != null && currentUser.isAnonymous) {
             displayAlert()
         } else {
-            FirebaseAuth.getInstance().signOut()
+            homeViewModel.signOut()
             VOID.Intent1(context, CLASS.SPLASH)
             applyTransition()
             finish()
@@ -109,12 +142,7 @@ class Home : AppCompatActivity() {
                 finish()
             }
             .setNegativeButton(R.string.alert_delete_negative) { _, _ ->
-                DATA.FIREBASE_USER?.delete()
-                    ?.addOnSuccessListener {
-                        VOID.Intent1(context, CLASS.SPLASH)
-                        applyTransition()
-                        finish()
-                    }
+                authViewModel.deleteAnonymousUser(homeViewModel.currentUser?.uid ?: "")
             }.show()
     }
 

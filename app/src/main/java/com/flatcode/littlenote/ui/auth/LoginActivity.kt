@@ -1,31 +1,32 @@
-package com.flatcode.littlenote.auth
+package com.flatcode.littlenote.ui.auth
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.utils.CLASS
-import com.flatcode.littlenote.utils.DATA
-import com.flatcode.littlenote.utils.VOID
 import com.flatcode.littlenote.databinding.ActivityLoginBinding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.flatcode.littlenote.utils.CLASS
+import com.flatcode.littlenote.utils.VOID
+import com.flatcode.littlenote.viewmodel.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class Login : AppCompatActivity() {
+@AndroidEntryPoint
+class LoginActivity : AppCompatActivity() {
 
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
 
-    private val context: Context = this@Login
-    private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
-    private val store: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
+    private val context: Context = this@LoginActivity
+    private val viewModel: AuthViewModel by viewModels()
 
     private val progressDialog: AlertDialog by lazy {
         AlertDialog.Builder(context)
             .setTitle("Please wait...")
-            .setView(android.widget.ProgressBar(context).apply {
+            .setView(ProgressBar(context).apply {
                 setPadding(50, 50, 50, 50)
             })
             .setCancelable(false)
@@ -40,7 +41,6 @@ class Login : AppCompatActivity() {
         showWarning()
 
         binding.loginBtn.setOnClickListener {
-            progressDialog.setMessage("Logging In...")
             val email = binding.emailEt.text.toString()
             val password = binding.passwordEt.text.toString()
 
@@ -49,31 +49,34 @@ class Login : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            progressDialog.show()
-            auth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
-                showToast(getString(R.string.login_success))
-
-                val currentUser = auth.currentUser
-                if (currentUser != null && currentUser.isAnonymous) {
-                    store.collection(DATA.PARENT_PATH).document(currentUser.uid).delete()
-                        .addOnSuccessListener {
-                            showToast(getString(R.string.delete_message_notes))
-                        }
-
-                    currentUser.delete().addOnSuccessListener {
-                        showToast(getString(R.string.delete_message_user))
-                    }
-                }
-                VOID.IntentClear(context, CLASS.HOME)
-                finish()
-            }.addOnFailureListener { e: Exception ->
-                showToast("${getString(R.string.login_failure)}${e.message}")
-                progressDialog.dismiss()
-            }
+            viewModel.signIn(email, password)
         }
 
         binding.forget.setOnClickListener { VOID.Intent1(context, CLASS.FORGET_PASSWORD) }
         binding.noAccount.setOnClickListener { VOID.Intent1(context, CLASS.REGISTER) }
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.authStatus.observe(this) { result ->
+            when (result) {
+                is AuthViewModel.AuthResult.Loading -> {
+                    progressDialog.setMessage("Logging In...")
+                    progressDialog.show()
+                }
+                is AuthViewModel.AuthResult.Success -> {
+                    progressDialog.dismiss()
+                    showToast(result.message)
+                    VOID.IntentClear(context, CLASS.HOME)
+                    finish()
+                }
+                is AuthViewModel.AuthResult.Error -> {
+                    progressDialog.dismiss()
+                    showToast(result.message)
+                }
+            }
+        }
     }
 
     private fun showWarning() {

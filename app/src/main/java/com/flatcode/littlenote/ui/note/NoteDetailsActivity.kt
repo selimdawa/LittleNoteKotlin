@@ -1,4 +1,4 @@
-package com.flatcode.littlenote.activity
+package com.flatcode.littlenote.ui.note
 
 import android.content.Context
 import android.os.Build
@@ -8,16 +8,18 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.flatcode.littlenote.R
+import com.flatcode.littlenote.databinding.ActivityNoteDetailsBinding
 import com.flatcode.littlenote.utils.CLASS
 import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.utils.VOID
-import com.flatcode.littlenote.databinding.ActivityNoteDetailsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-class NoteDetails : AppCompatActivity() {
+@AndroidEntryPoint
+class NoteDetailsActivity : AppCompatActivity() {
 
     private var _binding: ActivityNoteDetailsBinding? = null
     private val binding get() = _binding!!
-    private val context: Context = this@NoteDetails
+    private val context: Context = this@NoteDetailsActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

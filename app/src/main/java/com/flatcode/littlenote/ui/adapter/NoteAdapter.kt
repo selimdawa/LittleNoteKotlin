@@ -1,4 +1,4 @@
-package com.flatcode.littlenote.adapter
+package com.flatcode.littlenote.ui.adapter
 
 import android.content.Context
 import android.view.Gravity
@@ -9,16 +9,17 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.flatcode.littlenote.model.Note
+import com.flatcode.littlenote.data.model.Note
+import com.flatcode.littlenote.databinding.ItemNoteBinding
 import com.flatcode.littlenote.utils.CLASS
 import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.utils.VOID
-import com.flatcode.littlenote.databinding.ItemNoteBinding
 
 class NoteAdapter(
     private val context: Context,
     options: FirestoreRecyclerOptions<Note>,
-    private val onNotesCountChanged: (Int) -> Unit
+    private val onNotesCountChanged: (Int) -> Unit,
+    private val onDeleteClicked: (String) -> Unit
 ) : FirestoreRecyclerAdapter<Note, NoteAdapter.NoteViewHolder>(options) {
 
     override fun onBindViewHolder(noteViewHolder: NoteViewHolder, i: Int, note: Note) {
@@ -39,7 +40,6 @@ class NoteAdapter(
         }
 
         binding.menuIcon.setOnClickListener { v ->
-            val docId1 = snapshots.getSnapshot(i).id
             val menu = PopupMenu(v.context, v).apply {
                 gravity = Gravity.END
             }
@@ -53,12 +53,7 @@ class NoteAdapter(
             }
 
             menu.menu.add(DATA.DELETE).setOnMenuItemClickListener {
-                val docRef = DATA.FIREBASE_STORE.collection(DATA.PARENT_PATH)
-                    .document(DATA.FirebaseUserUid).collection(DATA.CHILD_PATH)
-                    .document(docId1)
-                docRef.delete().addOnSuccessListener {
-                    onNotesCountChanged(itemCount)
-                }
+                onDeleteClicked(docId)
                 false
             }
             menu.show()

@@ -17,7 +17,7 @@
         android:theme="@style/Theme.MC.S1">
 
         <activity
-            android:name=".activity.Splash"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -27,44 +27,44 @@
         </activity>
 
         <activity
-            android:name=".auth.Register"
+            android:name=".ui.auth.RegisterActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".auth.Login"
+            android:name=".ui.auth.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".auth.ForgetPassword"
+            android:name=".ui.auth.ForgetPasswordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.EditNote"
+            android:name=".ui.note.EditNoteActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.AddNote"
+            android:name=".ui.note.AddNoteActivity"
             android:exported="false"
             android:label="@string/title_activity_add_note"
-            android:parentActivityName=".activity.Home"
+            android:parentActivityName=".ui.home.HomeActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.Home" />
+                android:value=".ui.home.HomeActivity" />
         </activity>
 
         <activity
-            android:name=".activity.NoteDetails"
+            android:name=".ui.note.NoteDetailsActivity"
             android:exported="false"
             android:label="@string/title_activity_note_details"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.Home"
+            android:name=".ui.home.HomeActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 

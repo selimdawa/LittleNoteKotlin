@@ -16,7 +16,7 @@ import coil3.asImage
 import coil3.load
 import coil3.request.crossfade
 import coil3.request.transformations
-import com.flatcode.littlenote.model.Note
+import com.flatcode.littlenote.data.model.Note
 import com.flatcode.littlenote.R
 
 object VOID {

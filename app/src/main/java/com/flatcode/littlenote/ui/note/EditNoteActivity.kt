@@ -1,4 +1,4 @@
-package com.flatcode.littlenote.activity
+package com.flatcode.littlenote.ui.note
 
 import android.content.Context
 import android.os.Build
@@ -6,16 +6,21 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.databinding.ActivityAddEditNoteBinding
+import com.flatcode.littlenote.utils.DATA
+import com.flatcode.littlenote.viewmodel.NoteViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class EditNote : AppCompatActivity() {
+@AndroidEntryPoint
+class EditNoteActivity : AppCompatActivity() {
 
     private var _binding: ActivityAddEditNoteBinding? = null
     private val binding get() = _binding!!
-    private val context: Context = this@EditNote
+    private val context: Context = this@EditNoteActivity
+    private val viewModel: NoteViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +34,9 @@ class EditNote : AppCompatActivity() {
             }
         })
 
-        val data = intent
-        val noteTitle = data.getStringExtra(DATA.TITLE)
-        val noteContent = data.getStringExtra(DATA.CONTENT)
-        val docId = data.getStringExtra(DATA.ID_PATH) ?: ""
+        val noteTitle = intent.getStringExtra(DATA.TITLE)
+        val noteContent = intent.getStringExtra(DATA.CONTENT)
+        val docId = intent.getStringExtra(DATA.ID_PATH) ?: ""
 
         binding.toolbar.nameSpace.setText(R.string.edit_note)
         binding.toolbar.image.visibility = View.VISIBLE
@@ -47,23 +51,28 @@ class EditNote : AppCompatActivity() {
                 Toast.makeText(context, R.string.error_empty, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            binding.progressBar.visibility = View.VISIBLE
+            viewModel.editNote(docId, nTitle, nContent)
+        }
 
-            val document = DATA.FIREBASE_STORE.collection(DATA.PARENT_PATH)
-                .document(DATA.FirebaseUserUid).collection(DATA.CHILD_PATH).document(docId)
+        observeViewModel()
+    }
 
-            val note = hashMapOf<String, Any>(
-                DATA.TITLE to nTitle,
-                DATA.CONTENT to nContent
-            )
-
-            document.update(note).addOnSuccessListener {
-                Toast.makeText(context, R.string.note_saved, Toast.LENGTH_SHORT).show()
-                applyTransition()
-                finish()
-            }.addOnFailureListener {
-                Toast.makeText(context, R.string.error_saved, Toast.LENGTH_SHORT).show()
-                binding.progressBar.visibility = View.GONE
+    private fun observeViewModel() {
+        viewModel.noteStatus.observe(this) { result ->
+            when (result) {
+                is NoteViewModel.NoteResult.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is NoteViewModel.NoteResult.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                    applyTransition()
+                    finish()
+                }
+                is NoteViewModel.NoteResult.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

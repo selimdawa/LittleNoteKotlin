@@ -1,28 +1,32 @@
-package com.flatcode.littlenote.auth
+package com.flatcode.littlenote.ui.auth
 
 import android.content.Context
 import android.os.Bundle
 import android.util.Patterns
+import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.flatcode.littlenote.databinding.ActivityForgetPasswordBinding
 import com.flatcode.littlenote.utils.CLASS
 import com.flatcode.littlenote.utils.VOID
-import com.flatcode.littlenote.databinding.ActivityForgetPasswordBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.flatcode.littlenote.viewmodel.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class ForgetPassword : AppCompatActivity() {
+@AndroidEntryPoint
+class ForgetPasswordActivity : AppCompatActivity() {
 
     private var _binding: ActivityForgetPasswordBinding? = null
     private val binding get() = _binding!!
 
-    private val context: Context = this@ForgetPassword
-    private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private val context: Context = this@ForgetPasswordActivity
+    private val viewModel: AuthViewModel by viewModels()
 
     private val progressDialog: AlertDialog by lazy {
         AlertDialog.Builder(context)
             .setTitle("Please wait...")
-            .setView(android.widget.ProgressBar(context).apply {
+            .setView(ProgressBar(context).apply {
                 setPadding(50, 50, 50, 50)
             })
             .setCancelable(false)
@@ -31,7 +35,6 @@ class ForgetPassword : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         _binding = ActivityForgetPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -46,6 +49,8 @@ class ForgetPassword : AppCompatActivity() {
         }
 
         binding.go.setOnClickListener { validateData() }
+
+        observeViewModel()
     }
 
     private fun validateData() {
@@ -59,26 +64,28 @@ class ForgetPassword : AppCompatActivity() {
                 showToast("Invalid email format...!")
             }
             else -> {
-                recoverPassword(email)
+                viewModel.resetPassword(email)
             }
         }
     }
 
-    private fun recoverPassword(email: String) {
-        progressDialog.setMessage("Sending password recovery instructions to $email")
-        progressDialog.show()
-
-        auth.sendPasswordResetEmail(email)
-            .addOnCompleteListener { task ->
-                progressDialog.dismiss()
-                if (task.isSuccessful) {
-                    showToast("Instructions to reset password sent to $email")
+    private fun observeViewModel() {
+        viewModel.authStatus.observe(this) { result ->
+            when (result) {
+                is AuthViewModel.AuthResult.Loading -> {
+                    progressDialog.setMessage("Sending recovery email...")
+                    progressDialog.show()
+                }
+                is AuthViewModel.AuthResult.Success -> {
+                    progressDialog.dismiss()
+                    showToast(result.message)
+                }
+                is AuthViewModel.AuthResult.Error -> {
+                    progressDialog.dismiss()
+                    showToast(result.message)
                 }
             }
-            .addOnFailureListener { e ->
-                progressDialog.dismiss()
-                showToast("Failed to send due to ${e.message}")
-            }
+        }
     }
 
     private fun showToast(message: String) {

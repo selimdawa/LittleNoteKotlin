@@ -1,32 +1,35 @@
-package com.flatcode.littlenote.auth
+package com.flatcode.littlenote.ui.auth
 
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.flatcode.littlenote.R
+import com.flatcode.littlenote.databinding.ActivityRegisterBinding
 import com.flatcode.littlenote.utils.CLASS
 import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.utils.VOID
-import com.flatcode.littlenote.databinding.ActivityRegisterBinding
+import com.flatcode.littlenote.viewmodel.AuthViewModel
 import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
+import dagger.hilt.android.AndroidEntryPoint
 
-class Register : AppCompatActivity() {
+@AndroidEntryPoint
+class RegisterActivity : AppCompatActivity() {
 
     private var _binding: ActivityRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private val context: Context = this@Register
-    private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private val context: Context = this@RegisterActivity
+    private val viewModel: AuthViewModel by viewModels()
 
     private val progressDialog: AlertDialog by lazy {
         AlertDialog.Builder(context)
             .setTitle("Please wait...")
-            .setView(android.widget.ProgressBar(context).apply {
+            .setView(ProgressBar(context).apply {
                 setPadding(50, 50, 50, 50)
             })
             .setCancelable(false)
@@ -41,8 +44,6 @@ class Register : AppCompatActivity() {
         binding.login.setOnClickListener { VOID.Intent1(context, CLASS.LOGIN) }
 
         binding.go.setOnClickListener {
-            progressDialog.setMessage("A new account is created...")
-
             val username = binding.nameEt.text.toString()
             val userEmail = binding.emailEt.text.toString()
             val userPass = binding.cPasswordEt.text.toString()
@@ -54,41 +55,51 @@ class Register : AppCompatActivity() {
             } else if (userPass != confirmPass) {
                 binding.passwordEt.error = DATA.ERR_PASS
             } else {
-                progressDialog.show()
                 val credential = EmailAuthProvider.getCredential(userEmail, userPass)
+                viewModel.linkCredential(credential, username)
+            }
+        }
 
-                auth.currentUser?.linkWithCredential(credential)
-                    ?.addOnSuccessListener {
-                        showToast(getString(R.string.notes_synced))
-                        val usr = auth.currentUser
-                        val request = UserProfileChangeRequest.Builder().setDisplayName(username).build()
-                        usr?.updateProfile(request)
+        observeViewModel()
+    }
 
-                        VOID.Intent1(context, CLASS.HOME)
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                            overrideActivityTransition(
-                                OVERRIDE_TRANSITION_OPEN,
-                                R.anim.slide_up,
-                                R.anim.slide_down
-                            )
-                        } else {
-                            @Suppress("DEPRECATION")
-                            overridePendingTransition(R.anim.slide_up, R.anim.slide_down)
-                        }
-
-                        finish()
-                    }
-                    ?.addOnFailureListener {
-                        showToast(getString(R.string.failed_connect))
-                        progressDialog.dismiss()
-                    }
+    private fun observeViewModel() {
+        viewModel.authStatus.observe(this) { result ->
+            when (result) {
+                is AuthViewModel.AuthResult.Loading -> {
+                    progressDialog.setMessage("A new account is created...")
+                    progressDialog.show()
+                }
+                is AuthViewModel.AuthResult.Success -> {
+                    progressDialog.dismiss()
+                    showToast(result.message)
+                    VOID.Intent1(context, CLASS.HOME)
+                    applyTransition()
+                    finish()
+                }
+                is AuthViewModel.AuthResult.Error -> {
+                    progressDialog.dismiss()
+                    showToast(result.message)
+                }
             }
         }
     }
 
     private fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun applyTransition() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(
+                OVERRIDE_TRANSITION_OPEN,
+                R.anim.slide_up,
+                R.anim.slide_down
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            overridePendingTransition(R.anim.slide_up, R.anim.slide_down)
+        }
     }
 
     override fun onDestroy() {

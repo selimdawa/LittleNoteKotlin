@@ -1,4 +1,4 @@
-package com.flatcode.littlenote.activity
+package com.flatcode.littlenote.ui.note
 
 import android.content.Context
 import android.os.Build
@@ -6,16 +6,20 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.databinding.ActivityAddEditNoteBinding
+import com.flatcode.littlenote.viewmodel.NoteViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class AddNote : AppCompatActivity() {
+@AndroidEntryPoint
+class AddNoteActivity : AppCompatActivity() {
 
     private var _binding: ActivityAddEditNoteBinding? = null
     private val binding get() = _binding!!
-    private val context: Context = this@AddNote
+    private val context: Context = this@AddNoteActivity
+    private val viewModel: NoteViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,7 @@ class AddNote : AppCompatActivity() {
         binding.toolbar.nameSpace.setText(R.string.add_note)
         binding.toolbar.image.visibility = View.VISIBLE
         binding.toolbar.image.setImageResource(R.drawable.ic_true)
+        
         binding.toolbar.image.setOnClickListener {
             val nTitle = binding.noteTitle.text.toString()
             val nContent = binding.noteContent.text.toString()
@@ -39,23 +44,28 @@ class AddNote : AppCompatActivity() {
                 Toast.makeText(context, R.string.error_empty, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            binding.progressBar.visibility = View.VISIBLE
+            viewModel.addNote(nTitle, nContent)
+        }
 
-            val document = DATA.FIREBASE_STORE.collection(DATA.PARENT_PATH)
-                .document(DATA.FirebaseUserUid).collection(DATA.CHILD_PATH).document()
+        observeViewModel()
+    }
 
-            val note = hashMapOf<String, Any>(
-                DATA.TITLE to nTitle,
-                DATA.CONTENT to nContent
-            )
-
-            document.set(note).addOnSuccessListener {
-                Toast.makeText(context, R.string.success_note_add, Toast.LENGTH_SHORT).show()
-                applyTransition()
-                finish()
-            }.addOnFailureListener {
-                Toast.makeText(context, R.string.error_empty, Toast.LENGTH_SHORT).show()
-                binding.progressBar.visibility = View.GONE
+    private fun observeViewModel() {
+        viewModel.noteStatus.observe(this) { result ->
+            when (result) {
+                is NoteViewModel.NoteResult.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is NoteViewModel.NoteResult.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                    applyTransition()
+                    finish()
+                }
+                is NoteViewModel.NoteResult.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
