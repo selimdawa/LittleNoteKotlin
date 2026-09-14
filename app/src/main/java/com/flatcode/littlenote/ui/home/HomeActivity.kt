@@ -9,6 +9,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.flatcode.littlenote.R
@@ -22,6 +25,7 @@ import com.flatcode.littlenote.viewmodel.AuthViewModel
 import com.flatcode.littlenote.viewmodel.HomeViewModel
 import com.flatcode.littlenote.viewmodel.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.text.MessageFormat
 
 @AndroidEntryPoint
@@ -104,19 +108,27 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun observeViewModels() {
-        noteViewModel.noteStatus.observe(this) { result ->
-            if (result is NoteViewModel.NoteResult.Success) {
-                showToast(result.message)
-            } else if (result is NoteViewModel.NoteResult.Error) {
-                showToast(result.message)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                noteViewModel.noteStatus.collect { result ->
+                    if (result is NoteViewModel.NoteResult.Success) {
+                        showToast(result.message)
+                    } else if (result is NoteViewModel.NoteResult.Error) {
+                        showToast(result.message)
+                    }
+                }
             }
         }
 
-        authViewModel.authStatus.observe(this) { result ->
-            if (result is AuthViewModel.AuthResult.Success && result.message == "User deleted") {
-                VOID.Intent1(context, CLASS.SPLASH)
-                applyTransition()
-                finish()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authViewModel.authStatus.collect { result ->
+                    if (result is AuthViewModel.AuthResult.Success && result.message == "User deleted") {
+                        VOID.Intent1(context, CLASS.SPLASH)
+                        applyTransition()
+                        finish()
+                    }
+                }
             }
         }
     }

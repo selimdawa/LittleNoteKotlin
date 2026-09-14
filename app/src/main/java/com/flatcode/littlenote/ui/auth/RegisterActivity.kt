@@ -8,6 +8,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.flatcode.littlenote.R
 import com.flatcode.littlenote.databinding.ActivityRegisterBinding
 import com.flatcode.littlenote.utils.CLASS
@@ -16,6 +19,7 @@ import com.flatcode.littlenote.utils.VOID
 import com.flatcode.littlenote.viewmodel.AuthViewModel
 import com.google.firebase.auth.EmailAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
@@ -64,22 +68,27 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.authStatus.observe(this) { result ->
-            when (result) {
-                is AuthViewModel.AuthResult.Loading -> {
-                    progressDialog.setMessage("A new account is created...")
-                    progressDialog.show()
-                }
-                is AuthViewModel.AuthResult.Success -> {
-                    progressDialog.dismiss()
-                    showToast(result.message)
-                    VOID.Intent1(context, CLASS.HOME)
-                    applyTransition()
-                    finish()
-                }
-                is AuthViewModel.AuthResult.Error -> {
-                    progressDialog.dismiss()
-                    showToast(result.message)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.authStatus.collect { result ->
+                    when (result) {
+                        is AuthViewModel.AuthResult.Loading -> {
+                            progressDialog.setMessage("A new account is created...")
+                            progressDialog.show()
+                        }
+                        is AuthViewModel.AuthResult.Success -> {
+                            progressDialog.dismiss()
+                            showToast(result.message)
+                            VOID.Intent1(context, CLASS.HOME)
+                            applyTransition()
+                            finish()
+                        }
+                        is AuthViewModel.AuthResult.Error -> {
+                            progressDialog.dismiss()
+                            showToast(result.message)
+                        }
+                        else -> {}
+                    }
                 }
             }
         }

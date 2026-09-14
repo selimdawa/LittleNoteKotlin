@@ -8,11 +8,15 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.flatcode.littlenote.R
 import com.flatcode.littlenote.databinding.ActivityAddEditNoteBinding
 import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.viewmodel.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class EditNoteActivity : AppCompatActivity() {
@@ -58,20 +62,25 @@ class EditNoteActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.noteStatus.observe(this) { result ->
-            when (result) {
-                is NoteViewModel.NoteResult.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                }
-                is NoteViewModel.NoteResult.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
-                    applyTransition()
-                    finish()
-                }
-                is NoteViewModel.NoteResult.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.noteStatus.collect { result ->
+                    when (result) {
+                        is NoteViewModel.NoteResult.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                        }
+                        is NoteViewModel.NoteResult.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                            applyTransition()
+                            finish()
+                        }
+                        is NoteViewModel.NoteResult.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                        }
+                        else -> {}
+                    }
                 }
             }
         }

@@ -8,6 +8,9 @@ import android.os.Looper
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.flatcode.littlenote.R
 import com.flatcode.littlenote.databinding.ActivitySplashBinding
 import com.flatcode.littlenote.utils.CLASS
@@ -15,6 +18,7 @@ import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.utils.VOID
 import com.flatcode.littlenote.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
@@ -41,19 +45,23 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun observeAuthStatus() {
-        viewModel.authStatus.observe(this) { result ->
-            when (result) {
-                is AuthViewModel.AuthResult.Success -> {
-                    if (result.message == "Anonymous Login Successful") {
-                        Toast.makeText(context, R.string.temporary_log, Toast.LENGTH_LONG).show()
-                        goToHome()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.authStatus.collect { result ->
+                    when (result) {
+                        is AuthViewModel.AuthResult.Success -> {
+                            if (result.message == "Anonymous Login Successful") {
+                                Toast.makeText(context, R.string.temporary_log, Toast.LENGTH_LONG).show()
+                                goToHome()
+                            }
+                        }
+                        is AuthViewModel.AuthResult.Error -> {
+                            Toast.makeText(context, "${getString(R.string.error_log)}${result.message}", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                        else -> {}
                     }
                 }
-                is AuthViewModel.AuthResult.Error -> {
-                    Toast.makeText(context, "${getString(R.string.error_log)}${result.message}", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-                else -> {}
             }
         }
     }

@@ -7,12 +7,16 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.flatcode.littlenote.R
 import com.flatcode.littlenote.databinding.ActivityLoginBinding
 import com.flatcode.littlenote.utils.CLASS
 import com.flatcode.littlenote.utils.VOID
 import com.flatcode.littlenote.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
@@ -59,21 +63,26 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.authStatus.observe(this) { result ->
-            when (result) {
-                is AuthViewModel.AuthResult.Loading -> {
-                    progressDialog.setMessage("Logging In...")
-                    progressDialog.show()
-                }
-                is AuthViewModel.AuthResult.Success -> {
-                    progressDialog.dismiss()
-                    showToast(result.message)
-                    VOID.IntentClear(context, CLASS.HOME)
-                    finish()
-                }
-                is AuthViewModel.AuthResult.Error -> {
-                    progressDialog.dismiss()
-                    showToast(result.message)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.authStatus.collect { result ->
+                    when (result) {
+                        is AuthViewModel.AuthResult.Loading -> {
+                            progressDialog.setMessage("Logging In...")
+                            progressDialog.show()
+                        }
+                        is AuthViewModel.AuthResult.Success -> {
+                            progressDialog.dismiss()
+                            showToast(result.message)
+                            VOID.IntentClear(context, CLASS.HOME)
+                            finish()
+                        }
+                        is AuthViewModel.AuthResult.Error -> {
+                            progressDialog.dismiss()
+                            showToast(result.message)
+                        }
+                        else -> {}
+                    }
                 }
             }
         }
