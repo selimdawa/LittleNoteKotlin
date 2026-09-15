@@ -48,9 +48,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.datastore.preferences)   //DataStore
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     //Layout
     implementation(libs.material)
     implementation(libs.multicolors)
@@ -78,15 +75,19 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     //Other
     implementation(libs.timber)
-    // AppFunctions
+    //AppFunctions
     implementation(libs.androidx.appfunctions)
     ksp(libs.androidx.appfunctions.compiler)
-    // WorkManager
+    //WorkManager
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.hilt.work)
     ksp(libs.androidx.hilt.compiler)
-    // Biometric
+    //Biometric
     implementation(libs.androidx.biometric)
+    //Test
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
 
 ksp {
