@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.flatcode.littlenote.R
+import com.flatcode.littlenote.data.model.Note
 import com.flatcode.littlenote.databinding.ActivityAddEditNoteBinding
 import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.viewmodel.NoteViewModel
@@ -45,7 +46,8 @@ class EditNoteFragment : Fragment() {
 
         val titleArg = arguments?.getString(DATA.TITLE)
         val contentArg = arguments?.getString(DATA.CONTENT)
-        val docId = arguments?.getString(DATA.ID_PATH) ?: ""
+        val docId = arguments?.getString(DATA.ID_PATH)
+        val roomId = arguments?.getInt(DATA.ROOM_ID) ?: 0
 
         binding.run {
             toolbar.nameSpace.setText(R.string.edit_note)
@@ -61,7 +63,8 @@ class EditNoteFragment : Fragment() {
                     Toast.makeText(requireContext(), R.string.error_empty, Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-                viewModel.editNote(docId, nTitle, nContent)
+                val note = Note(id = roomId, remoteId = docId, title = nTitle, content = nContent)
+                viewModel.editNote(note)
             }
         }
 

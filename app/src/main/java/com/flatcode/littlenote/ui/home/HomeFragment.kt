@@ -1,17 +1,14 @@
 package com.flatcode.littlenote.ui.home
 
 import android.app.Dialog
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -19,9 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.data.model.Note
 import com.flatcode.littlenote.databinding.ActivityHomeBinding
 import com.flatcode.littlenote.databinding.DialogAboutAccountBinding
 import com.flatcode.littlenote.databinding.DialogCloseAppBinding
@@ -66,6 +61,8 @@ class HomeFragment : Fragment() {
         setupToolbar()
         setupRecyclerView()
         observeViewModels()
+        
+        noteViewModel.syncNotes()
     }
 
     private fun setupToolbar() {
@@ -125,29 +122,23 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val query = homeViewModel.getNotesQuery() ?: return
-
-        val options = FirestoreRecyclerOptions.Builder<Note>()
-            .setQuery(query, Note::class.java)
-            .build()
-
-        noteAdapter = NoteAdapter(requireContext(), options, { count ->
-            binding.toolbar.number.text = MessageFormat.format(" ({0})", count)
-        }, { docId ->
-            noteViewModel.deleteNote(docId)
-        }, { note, docId, color ->
+        noteAdapter = NoteAdapter(requireContext(), { note ->
+            noteViewModel.deleteNote(note)
+        }, { note, color ->
             val bundle = Bundle().apply {
                 putString(DATA.TITLE, note.title)
                 putString(DATA.CONTENT, note.content)
-                putString(DATA.ID_PATH, docId)
+                putString(DATA.ID_PATH, note.remoteId)
+                putInt(DATA.ROOM_ID, note.id)
                 putInt(DATA.COLOR, color)
             }
             findNavController().navigate(R.id.action_homeFragment_to_noteDetailsFragment, bundle)
-        }, { note, docId ->
+        }, { note ->
             val bundle = Bundle().apply {
                 putString(DATA.TITLE, note.title)
                 putString(DATA.CONTENT, note.content)
-                putString(DATA.ID_PATH, docId)
+                putString(DATA.ID_PATH, note.remoteId)
+                putInt(DATA.ROOM_ID, note.id)
             }
             findNavController().navigate(R.id.action_homeFragment_to_editNoteFragment, bundle)
         })
@@ -155,7 +146,6 @@ class HomeFragment : Fragment() {
         binding.recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.recyclerView.adapter = noteAdapter
-        noteAdapter?.startListening()
     }
 
     private fun observeViewModels() {
@@ -167,6 +157,15 @@ class HomeFragment : Fragment() {
                     } else if (result is NoteViewModel.NoteResult.Error) {
                         showToast(result.message)
                     }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                noteViewModel.allNotes.collect { notes ->
+                    noteAdapter?.submitList(notes)
+                    binding.toolbar.number.text = MessageFormat.format(" ({0})", notes.size)
                 }
             }
         }
@@ -210,7 +209,6 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        noteAdapter?.stopListening()
         _binding = null
     }
 }

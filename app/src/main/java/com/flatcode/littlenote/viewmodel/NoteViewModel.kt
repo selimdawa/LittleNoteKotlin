@@ -7,8 +7,10 @@ import com.flatcode.littlenote.data.repository.AuthRepository
 import com.flatcode.littlenote.data.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -22,52 +24,52 @@ class NoteViewModel @Inject constructor(
     private val _noteStatus = MutableStateFlow<NoteResult>(NoteResult.Idle)
     val noteStatus: StateFlow<NoteResult> = _noteStatus.asStateFlow()
 
+    val allNotes: StateFlow<List<Note>> = noteRepository.getAllNotes()
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
     fun addNote(title: String, content: String) {
         val uid = authRepository.currentUser?.uid ?: return
-        val note = Note(title, content)
+        val note = Note(title = title, content = content)
         _noteStatus.value = NoteResult.Loading
-        Timber.d("Adding note: title=$title")
         viewModelScope.launch {
             try {
                 noteRepository.addNote(uid, note)
                 _noteStatus.value = NoteResult.Success("Note Added Successfully")
-                Timber.i("Note Added Successfully: $title")
             } catch (e: Exception) {
                 _noteStatus.value = NoteResult.Error(e.message ?: "Failed to add note")
-                Timber.e(e, "Failed to add note: $title")
             }
         }
     }
 
-    fun editNote(noteId: String, title: String, content: String) {
+    fun editNote(note: Note) {
         val uid = authRepository.currentUser?.uid ?: return
-        val note = Note(title, content)
         _noteStatus.value = NoteResult.Loading
-        Timber.d("Editing note: id=$noteId, title=$title")
         viewModelScope.launch {
             try {
-                noteRepository.editNote(uid, noteId, note)
+                noteRepository.editNote(uid, note)
                 _noteStatus.value = NoteResult.Success("Note Updated Successfully")
-                Timber.i("Note Updated Successfully: $noteId")
             } catch (e: Exception) {
                 _noteStatus.value = NoteResult.Error(e.message ?: "Failed to update note")
-                Timber.e(e, "Failed to update note: $noteId")
             }
         }
     }
 
-    fun deleteNote(noteId: String) {
+    fun deleteNote(note: Note) {
         val uid = authRepository.currentUser?.uid ?: return
-        Timber.d("Deleting note: id=$noteId")
         viewModelScope.launch {
             try {
-                noteRepository.deleteNote(uid, noteId)
+                noteRepository.deleteNote(uid, note)
                 _noteStatus.value = NoteResult.Success("Note Deleted Successfully")
-                Timber.i("Note Deleted Successfully: $noteId")
             } catch (e: Exception) {
                 _noteStatus.value = NoteResult.Error(e.message ?: "Failed to delete note")
-                Timber.e(e, "Failed to delete note: $noteId")
             }
+        }
+    }
+
+    fun syncNotes() {
+        val uid = authRepository.currentUser?.uid ?: return
+        viewModelScope.launch {
+            noteRepository.syncWithFirestore(uid)
         }
     }
 

@@ -59,7 +59,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="5sp"
-                android:src="@drawable/ic_more" />
+                android:src="@drawable/ic_more"
+                app:tint="@color/dark" />
 
         </LinearLayout>
 

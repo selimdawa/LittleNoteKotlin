@@ -6,51 +6,61 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.flatcode.littlenote.data.model.Note
 import com.flatcode.littlenote.databinding.ItemNoteBinding
 import com.flatcode.littlenote.utils.DATA
 
 class NoteAdapter(
     private val context: Context,
-    options: FirestoreRecyclerOptions<Note>,
-    private val onNotesCountChanged: (Int) -> Unit,
-    private val onDeleteClicked: (String) -> Unit,
-    private val onItemClicked: (Note, String, Int) -> Unit,
-    private val onEditClicked: (Note, String) -> Unit
-) : FirestoreRecyclerAdapter<Note, NoteAdapter.NoteViewHolder>(options) {
+    private val onDeleteClicked: (Note) -> Unit,
+    private val onItemClicked: (Note, Int) -> Unit,
+    private val onEditClicked: (Note) -> Unit
+) : ListAdapter<Note, NoteAdapter.NoteViewHolder>(NoteDiffCallback()) {
 
-    override fun onBindViewHolder(noteViewHolder: NoteViewHolder, i: Int, note: Note) {
-        val docId = snapshots.getSnapshot(i).id
-        val code = DATA.randomColor
-
-        noteViewHolder.binding.run {
-            title.text = note.title
-            description.text = note.content
-            card.setCardBackgroundColor(ContextCompat.getColor(context, code))
-            root.setOnClickListener { onItemClicked(note, docId, code) }
-            menuIcon.setOnClickListener { v ->
-                PopupMenu(v.context, v).apply {
-                    gravity = Gravity.END
-                    menu.add(DATA.EDIT).setOnMenuItemClickListener {
-                        onEditClicked(note, docId)
-                        false
-                    }
-                    menu.add(DATA.DELETE).setOnMenuItemClickListener {
-                        onDeleteClicked(docId)
-                        false
-                    }
-                    show()
-                }
-            }
-        }
-        onNotesCountChanged(itemCount)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
+        val binding = ItemNoteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return NoteViewHolder(binding)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder =
-        NoteViewHolder(ItemNoteBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+        val note = getItem(position)
+        val binding = holder.binding
+
+        binding.title.text = note.title
+        binding.description.text = note.content
+
+        val code = DATA.randomColor
+        binding.card.setCardBackgroundColor(ContextCompat.getColor(context, code))
+
+        binding.root.setOnClickListener {
+            onItemClicked(note, code)
+        }
+
+        binding.menuIcon.setOnClickListener { v ->
+            val menu = PopupMenu(v.context, v).apply {
+                gravity = Gravity.END
+            }
+
+            menu.menu.add(DATA.EDIT).setOnMenuItemClickListener {
+                onEditClicked(note)
+                false
+            }
+
+            menu.menu.add(DATA.DELETE).setOnMenuItemClickListener {
+                onDeleteClicked(note)
+                false
+            }
+            menu.show()
+        }
+    }
 
     class NoteViewHolder(val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root)
+
+    class NoteDiffCallback : DiffUtil.ItemCallback<Note>() {
+        override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean = oldItem == newItem
+    }
 }

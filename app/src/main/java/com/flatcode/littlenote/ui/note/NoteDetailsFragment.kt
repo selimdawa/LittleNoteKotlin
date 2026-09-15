@@ -41,6 +41,7 @@ class NoteDetailsFragment : Fragment() {
         val noteContent = arguments?.getString(DATA.CONTENT)
         val colorRes = arguments?.getInt(DATA.COLOR, DATA.DEFAULT_COLOR) ?: DATA.DEFAULT_COLOR
         val docId = arguments?.getString(DATA.ID_PATH)
+        val roomId = arguments?.getInt(DATA.ROOM_ID) ?: 0
 
         binding.run {
             toolbar.nameSpace.text = noteTitle
@@ -55,6 +56,7 @@ class NoteDetailsFragment : Fragment() {
                     putString(DATA.TITLE, noteTitle)
                     putString(DATA.CONTENT, noteContent)
                     putString(DATA.ID_PATH, docId)
+                    putInt(DATA.ROOM_ID, roomId)
                 }
                 findNavController().navigate(R.id.action_noteDetailsFragment_to_editNoteFragment, bundle)
             }

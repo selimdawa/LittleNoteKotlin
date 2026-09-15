@@ -11,6 +11,7 @@ object DATA {
     const val PARENT_PATH = "notes"
     const val CHILD_PATH = "myNotes"
     const val ID_PATH = "noteId"
+    const val ROOM_ID = "roomId"
 
     const val TITLE = "title"
     const val CONTENT = "content"
