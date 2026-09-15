@@ -11,7 +11,7 @@ appcompat = "1.8.0"
 material = "1.14.0"
 activity = "1.13.0"
 datastore = "1.2.1"
-googleServices= "4.5.0"
+googleServices = "4.5.0"
 multicolors = "1.0.10"
 lifecycle = "2.11.0"
 hilt = "2.60.1"
@@ -36,7 +36,6 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 coil3-main = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coil3-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
-kgp = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 multicolors = { module = "com.github.selimdawa:MultiColors", version.ref = "multicolors" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -54,3 +53,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }

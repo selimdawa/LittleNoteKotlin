@@ -61,7 +61,14 @@ class NoteRepository @Inject constructor(
                     remoteId = doc.id
                 }
             }
-            remoteNotes.forEach { noteDao.insertNote(it) }
+            remoteNotes.forEach { remoteNote ->
+                val localNote = remoteNote.remoteId?.let { noteDao.getNoteByRemoteId(it) }
+                if (localNote != null) {
+                    noteDao.updateNote(remoteNote.copy(id = localNote.id))
+                } else {
+                    noteDao.insertNote(remoteNote)
+                }
+            }
         } catch (e: Exception) {
             Timber.e(e, "Sync failed")
         }

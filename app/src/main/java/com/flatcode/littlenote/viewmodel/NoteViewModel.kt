@@ -12,20 +12,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val noteRepository: NoteRepository
+    private val authRepository: AuthRepository, private val noteRepository: NoteRepository
 ) : ViewModel() {
 
     private val _noteStatus = MutableStateFlow<NoteResult>(NoteResult.Idle)
     val noteStatus: StateFlow<NoteResult> = _noteStatus.asStateFlow()
 
-    val allNotes: StateFlow<List<Note>> = noteRepository.getAllNotes()
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    val allNotes: StateFlow<List<Note>> =
+        noteRepository.getAllNotes().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun addNote(title: String, content: String) {
         val uid = authRepository.currentUser?.uid ?: return
@@ -68,8 +66,14 @@ class NoteViewModel @Inject constructor(
 
     fun syncNotes() {
         val uid = authRepository.currentUser?.uid ?: return
+        _noteStatus.value = NoteResult.Loading
         viewModelScope.launch {
-            noteRepository.syncWithFirestore(uid)
+            try {
+                noteRepository.syncWithFirestore(uid)
+                _noteStatus.value = NoteResult.Success("Sync Completed")
+            } catch (e: Exception) {
+                _noteStatus.value = NoteResult.Error(e.message ?: "Sync Failed")
+            }
         }
     }
 

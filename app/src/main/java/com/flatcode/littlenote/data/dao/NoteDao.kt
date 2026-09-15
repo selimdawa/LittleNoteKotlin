@@ -23,4 +23,7 @@ interface NoteDao {
 
     @Query("SELECT * FROM notes WHERE id = :noteId")
     suspend fun getNoteById(noteId: Int): Note?
+
+    @Query("SELECT * FROM notes WHERE remoteId = :remoteId")
+    suspend fun getNoteByRemoteId(remoteId: String): Note?
 }

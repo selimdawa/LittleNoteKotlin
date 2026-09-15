@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -61,20 +62,24 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.firestore)                //Firebase Fire Store
-    // Architecture Components & MVVM
+    //MVVM
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    // Coroutines
+    //Coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
-    // Hilt (Dependency Injection)
+    //Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    // Navigation Component
+    //Navigation Component
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    // Room Database
+    //Room Database
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     //Other
     implementation(libs.timber)
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }

@@ -126,19 +126,13 @@ class HomeFragment : Fragment() {
             noteViewModel.deleteNote(note)
         }, { note, color ->
             val bundle = Bundle().apply {
-                putString(DATA.TITLE, note.title)
-                putString(DATA.CONTENT, note.content)
-                putString(DATA.ID_PATH, note.remoteId)
-                putInt(DATA.ROOM_ID, note.id)
+                putParcelable(DATA.NOTE, note)
                 putInt(DATA.COLOR, color)
             }
             findNavController().navigate(R.id.action_homeFragment_to_noteDetailsFragment, bundle)
         }, { note ->
             val bundle = Bundle().apply {
-                putString(DATA.TITLE, note.title)
-                putString(DATA.CONTENT, note.content)
-                putString(DATA.ID_PATH, note.remoteId)
-                putInt(DATA.ROOM_ID, note.id)
+                putParcelable(DATA.NOTE, note)
             }
             findNavController().navigate(R.id.action_homeFragment_to_editNoteFragment, bundle)
         })

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.os.BundleCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -28,8 +29,7 @@ class EditNoteFragment : Fragment() {
     private val viewModel: NoteViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = ActivityAddEditNoteBinding.inflate(inflater, container, false)
         return binding.root
@@ -38,32 +38,35 @@ class EditNoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack()
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            })
 
-        val titleArg = arguments?.getString(DATA.TITLE)
-        val contentArg = arguments?.getString(DATA.CONTENT)
-        val docId = arguments?.getString(DATA.ID_PATH)
-        val roomId = arguments?.getInt(DATA.ROOM_ID) ?: 0
+        val noteArg = arguments?.let {
+            BundleCompat.getParcelable(it, DATA.NOTE, Note::class.java)
+        }
 
         binding.run {
             toolbar.nameSpace.setText(R.string.edit_note)
             toolbar.image.visibility = View.VISIBLE
             toolbar.image.setImageResource(R.drawable.ic_true)
-            noteTitle.setText(titleArg)
-            noteContent.setText(contentArg)
+            noteTitle.setText(noteArg?.title)
+            noteContent.setText(noteArg?.content)
 
             toolbar.image.setOnClickListener {
                 val nTitle = noteTitle.text.toString()
                 val nContent = noteContent.text.toString()
                 if (nTitle.isEmpty() || nContent.isEmpty()) {
-                    Toast.makeText(requireContext(), R.string.error_empty, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.error_empty, Toast.LENGTH_SHORT)
+                        .show()
                     return@setOnClickListener
                 }
-                val note = Note(id = roomId, remoteId = docId, title = nTitle, content = nContent)
+                val note = noteArg?.copy(title = nTitle, content = nContent) ?: Note(
+                    title = nTitle, content = nContent
+                )
                 viewModel.editNote(note)
             }
         }
@@ -79,15 +82,20 @@ class EditNoteFragment : Fragment() {
                         is NoteViewModel.NoteResult.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                         }
+
                         is NoteViewModel.NoteResult.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT)
+                                .show()
                             findNavController().popBackStack()
                         }
+
                         is NoteViewModel.NoteResult.Error -> {
                             binding.progressBar.visibility = View.GONE
-                            Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT)
+                                .show()
                         }
+
                         else -> {}
                     }
                 }
