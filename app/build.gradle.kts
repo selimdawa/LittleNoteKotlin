@@ -78,8 +78,12 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     //Other
     implementation(libs.timber)
+    // AppFunctions
+    implementation(libs.androidx.appfunctions)
+    ksp(libs.androidx.appfunctions.compiler)
 }
 
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
+    arg("appfunctions:aggregateAppFunctions", "true")
 }

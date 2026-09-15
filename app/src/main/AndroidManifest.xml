@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LittleNote">
 
+        <property
+            android:name="android.app.appfunctions.app_metadata"
+            android:resource="@xml/app_metadata" />
+
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true"

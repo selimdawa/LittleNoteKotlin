@@ -42,4 +42,5 @@
     <string name="do_you_want_to_exit">Do you want to Exit ?</string>
     <string name="no">NO</string>
     <string name="yes">YES</string>
+    <string name="user_visible_description">This app allows you to create and manage personal notes using AI agents.</string>
 </resources>

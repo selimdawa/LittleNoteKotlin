@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AppFunctionAppMetadata xmlns:appfn="http://schemas.android.com/apk/androidx.appfunctions"
+    appfn:description="This app manages personal notes.
+    Operational Patterns:
+    - Use 'addNote' to create a new note with a title and description."
+    appfn:displayDescription="@string/user_visible_description" />
