@@ -23,42 +23,34 @@ class NoteAdapter(
 ) : FirestoreRecyclerAdapter<Note, NoteAdapter.NoteViewHolder>(options) {
 
     override fun onBindViewHolder(noteViewHolder: NoteViewHolder, i: Int, note: Note) {
-        val binding = noteViewHolder.binding
-
-        binding.title.text = note.title
-        binding.description.text = note.content
-
-        val code = DATA.randomColor
-        binding.card.setCardBackgroundColor(ContextCompat.getColor(context, code))
-
         val docId = snapshots.getSnapshot(i).id
-        binding.root.setOnClickListener {
-            onItemClicked(note, docId, code)
-        }
+        val code = DATA.randomColor
 
-        binding.menuIcon.setOnClickListener { v ->
-            val menu = PopupMenu(v.context, v).apply {
-                gravity = Gravity.END
+        noteViewHolder.binding.run {
+            title.text = note.title
+            description.text = note.content
+            card.setCardBackgroundColor(ContextCompat.getColor(context, code))
+            root.setOnClickListener { onItemClicked(note, docId, code) }
+            menuIcon.setOnClickListener { v ->
+                PopupMenu(v.context, v).apply {
+                    gravity = Gravity.END
+                    menu.add(DATA.EDIT).setOnMenuItemClickListener {
+                        onEditClicked(note, docId)
+                        false
+                    }
+                    menu.add(DATA.DELETE).setOnMenuItemClickListener {
+                        onDeleteClicked(docId)
+                        false
+                    }
+                    show()
+                }
             }
-
-            menu.menu.add(DATA.EDIT).setOnMenuItemClickListener {
-                onEditClicked(note, docId)
-                false
-            }
-
-            menu.menu.add(DATA.DELETE).setOnMenuItemClickListener {
-                onDeleteClicked(docId)
-                false
-            }
-            menu.show()
         }
         onNotesCountChanged(itemCount)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        val binding = ItemNoteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return NoteViewHolder(binding)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder =
+        NoteViewHolder(ItemNoteBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     class NoteViewHolder(val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root)
 }

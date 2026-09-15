@@ -43,24 +43,26 @@ class EditNoteFragment : Fragment() {
             }
         })
 
-        val noteTitle = arguments?.getString(DATA.TITLE)
-        val noteContent = arguments?.getString(DATA.CONTENT)
+        val titleArg = arguments?.getString(DATA.TITLE)
+        val contentArg = arguments?.getString(DATA.CONTENT)
         val docId = arguments?.getString(DATA.ID_PATH) ?: ""
 
-        binding.toolbar.nameSpace.setText(R.string.edit_note)
-        binding.toolbar.image.visibility = View.VISIBLE
-        binding.toolbar.image.setImageResource(R.drawable.ic_true)
-        binding.noteTitle.setText(noteTitle)
-        binding.noteContent.setText(noteContent)
+        binding.run {
+            toolbar.nameSpace.setText(R.string.edit_note)
+            toolbar.image.visibility = View.VISIBLE
+            toolbar.image.setImageResource(R.drawable.ic_true)
+            noteTitle.setText(titleArg)
+            noteContent.setText(contentArg)
 
-        binding.toolbar.image.setOnClickListener {
-            val nTitle = binding.noteTitle.text.toString()
-            val nContent = binding.noteContent.text.toString()
-            if (nTitle.isEmpty() || nContent.isEmpty()) {
-                Toast.makeText(requireContext(), R.string.error_empty, Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            toolbar.image.setOnClickListener {
+                val nTitle = noteTitle.text.toString()
+                val nContent = noteContent.text.toString()
+                if (nTitle.isEmpty() || nContent.isEmpty()) {
+                    Toast.makeText(requireContext(), R.string.error_empty, Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                viewModel.editNote(docId, nTitle, nContent)
             }
-            viewModel.editNote(docId, nTitle, nContent)
         }
 
         observeViewModel()

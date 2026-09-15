@@ -16,12 +16,7 @@ class HomeViewModel @Inject constructor(
 
     val currentUser: FirebaseUser? get() = authRepository.currentUser
 
-    fun getNotesQuery(): Query? {
-        val uid = currentUser?.uid ?: return null
-        return noteRepository.getNotesQuery(uid)
-    }
+    fun getNotesQuery(): Query? = currentUser?.uid?.let { noteRepository.getNotesQuery(it) }
 
-    fun signOut() {
-        authRepository.signOut()
-    }
+    fun signOut() = authRepository.signOut()
 }

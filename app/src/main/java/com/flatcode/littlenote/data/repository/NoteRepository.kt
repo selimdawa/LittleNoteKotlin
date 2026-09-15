@@ -12,23 +12,15 @@ import javax.inject.Singleton
 class NoteRepository @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
-    fun getNotesQuery(uid: String): Query {
-        return firestore.collection(DATA.PARENT_PATH).document(uid)
-            .collection(DATA.CHILD_PATH).orderBy(DATA.TITLE, Query.Direction.DESCENDING)
-    }
+    fun getNotesQuery(uid: String): Query = firestore.collection(DATA.PARENT_PATH).document(uid)
+        .collection(DATA.CHILD_PATH).orderBy(DATA.TITLE, Query.Direction.DESCENDING)
 
-    suspend fun addNote(uid: String, note: Note) {
-        firestore.collection(DATA.PARENT_PATH).document(uid)
-            .collection(DATA.CHILD_PATH).add(note).await()
-    }
+    suspend fun addNote(uid: String, note: Note) = firestore.collection(DATA.PARENT_PATH).document(uid)
+        .collection(DATA.CHILD_PATH).add(note).await()
 
-    suspend fun editNote(uid: String, noteId: String, note: Note) {
-        firestore.collection(DATA.PARENT_PATH).document(uid)
-            .collection(DATA.CHILD_PATH).document(noteId).set(note).await()
-    }
+    suspend fun editNote(uid: String, noteId: String, note: Note) = firestore.collection(DATA.PARENT_PATH).document(uid)
+        .collection(DATA.CHILD_PATH).document(noteId).set(note).await()
 
-    suspend fun deleteNote(uid: String, noteId: String) {
-        firestore.collection(DATA.PARENT_PATH).document(uid)
-            .collection(DATA.CHILD_PATH).document(noteId).delete().await()
-    }
+    suspend fun deleteNote(uid: String, noteId: String) = firestore.collection(DATA.PARENT_PATH).document(uid)
+        .collection(DATA.CHILD_PATH).document(noteId).delete().await()
 }

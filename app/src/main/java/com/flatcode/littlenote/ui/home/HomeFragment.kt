@@ -70,30 +70,32 @@ class HomeFragment : Fragment() {
 
     private fun setupToolbar() {
         val currentUser = homeViewModel.currentUser
-        if (currentUser != null && currentUser.isAnonymous) {
-            binding.toolbar.info.visibility = View.GONE
-            binding.toolbar.sync.visibility = View.VISIBLE
-        } else {
-            binding.toolbar.info.visibility = View.VISIBLE
-            binding.toolbar.sync.visibility = View.GONE
-        }
-
-        binding.toolbar.sync.setOnClickListener {
+        binding.toolbar.run {
             if (currentUser != null && currentUser.isAnonymous) {
-                findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+                info.visibility = View.GONE
+                sync.visibility = View.VISIBLE
             } else {
-                showToast(getString(R.string.temporary_connect))
+                info.visibility = View.VISIBLE
+                sync.visibility = View.GONE
             }
-        }
 
-        binding.toolbar.add.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_addNoteFragment)
-        }
+            sync.setOnClickListener {
+                if (currentUser != null && currentUser.isAnonymous) {
+                    findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+                } else {
+                    showToast(getString(R.string.temporary_connect))
+                }
+            }
 
-        binding.toolbar.logout.setOnClickListener { checkUser() }
-        binding.toolbar.info.setOnClickListener {
-            currentUser?.let {
-                showAboutAccountDialog(it.displayName, it.email)
+            add.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_addNoteFragment)
+            }
+
+            logout.setOnClickListener { checkUser() }
+            info.setOnClickListener {
+                currentUser?.let {
+                    showAboutAccountDialog(it.displayName, it.email)
+                }
             }
         }
     }

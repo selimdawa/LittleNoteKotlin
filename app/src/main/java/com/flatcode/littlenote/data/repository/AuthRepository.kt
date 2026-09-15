@@ -25,13 +25,9 @@ class AuthRepository @Inject constructor(
         auth.currentUser?.updateProfile(request)?.await()
     }
 
-    suspend fun deleteUserNotes(uid: String) {
-        firestore.collection("notes").document(uid).delete().await()
-    }
+    suspend fun deleteUserNotes(uid: String) = firestore.collection("notes").document(uid).delete().await()
 
-    suspend fun deleteUser() {
-        auth.currentUser?.delete()?.await()
-    }
+    suspend fun deleteUser() = auth.currentUser?.delete()?.await()
 
     fun signOut() = auth.signOut()
 

@@ -42,24 +42,26 @@ class NoteDetailsFragment : Fragment() {
         val colorRes = arguments?.getInt(DATA.COLOR, DATA.DEFAULT_COLOR) ?: DATA.DEFAULT_COLOR
         val docId = arguments?.getString(DATA.ID_PATH)
 
-        binding.toolbar.nameSpace.text = noteTitle
-        binding.description.movementMethod = ScrollingMovementMethod()
-        binding.description.text = noteContent
-        binding.description.setBackgroundColor(ContextCompat.getColor(requireContext(), colorRes))
+        binding.run {
+            toolbar.nameSpace.text = noteTitle
+            description.movementMethod = ScrollingMovementMethod()
+            description.text = noteContent
+            description.setBackgroundColor(ContextCompat.getColor(requireContext(), colorRes))
 
-        binding.toolbar.image.visibility = View.VISIBLE
-        binding.toolbar.image.setImageResource(R.drawable.ic_edit)
-        binding.toolbar.image.setOnClickListener {
-            val bundle = Bundle().apply {
-                putString(DATA.TITLE, noteTitle)
-                putString(DATA.CONTENT, noteContent)
-                putString(DATA.ID_PATH, docId)
+            toolbar.image.visibility = View.VISIBLE
+            toolbar.image.setImageResource(R.drawable.ic_edit)
+            toolbar.image.setOnClickListener {
+                val bundle = Bundle().apply {
+                    putString(DATA.TITLE, noteTitle)
+                    putString(DATA.CONTENT, noteContent)
+                    putString(DATA.ID_PATH, docId)
+                }
+                findNavController().navigate(R.id.action_noteDetailsFragment_to_editNoteFragment, bundle)
             }
-            findNavController().navigate(R.id.action_noteDetailsFragment_to_editNoteFragment, bundle)
-        }
 
-        binding.toolbar.add.setOnClickListener {
-            findNavController().popBackStack()
+            toolbar.add.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
     }
 

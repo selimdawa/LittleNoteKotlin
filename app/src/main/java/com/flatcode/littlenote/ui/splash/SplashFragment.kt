@@ -69,9 +69,7 @@ class SplashFragment : Fragment() {
         }
     }
 
-    private fun goToHome() {
-        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
-    }
+    private fun goToHome() = findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
 
     override fun onDestroyView() {
         super.onDestroyView()

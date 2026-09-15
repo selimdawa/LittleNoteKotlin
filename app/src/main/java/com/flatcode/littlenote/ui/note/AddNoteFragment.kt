@@ -42,18 +42,20 @@ class AddNoteFragment : Fragment() {
             }
         })
 
-        binding.toolbar.nameSpace.setText(R.string.add_note)
-        binding.toolbar.image.visibility = View.VISIBLE
-        binding.toolbar.image.setImageResource(R.drawable.ic_true)
-        
-        binding.toolbar.image.setOnClickListener {
-            val nTitle = binding.noteTitle.text.toString()
-            val nContent = binding.noteContent.text.toString()
-            if (nTitle.isEmpty() || nContent.isEmpty()) {
-                Toast.makeText(requireContext(), R.string.error_empty, Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+        binding.run {
+            toolbar.nameSpace.setText(R.string.add_note)
+            toolbar.image.visibility = View.VISIBLE
+            toolbar.image.setImageResource(R.drawable.ic_true)
+            
+            toolbar.image.setOnClickListener {
+                val nTitle = noteTitle.text.toString()
+                val nContent = noteContent.text.toString()
+                if (nTitle.isEmpty() || nContent.isEmpty()) {
+                    Toast.makeText(requireContext(), R.string.error_empty, Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                viewModel.addNote(nTitle, nContent)
             }
-            viewModel.addNote(nTitle, nContent)
         }
 
         observeViewModel()

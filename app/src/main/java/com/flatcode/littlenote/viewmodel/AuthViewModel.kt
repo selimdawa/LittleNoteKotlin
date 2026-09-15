@@ -111,10 +111,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun signOut() {
-        Timber.d("Signing out")
-        repository.signOut()
-    }
+    fun signOut() = repository.signOut().also { Timber.d("Signing out") }
 
     sealed class AuthResult {
         object Idle : AuthResult()
