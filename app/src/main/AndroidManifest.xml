@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo_icon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MC.S1">
+        android:theme="@style/Theme.LittleNote">
 
         <activity
             android:name=".ui.main.MainActivity"
