@@ -100,45 +100,25 @@ class HomeFragment : Fragment() {
 
     private fun showCloseAppDialog() {
         val dialogBinding = DialogCloseAppBinding.inflate(layoutInflater)
-        val dialog = Dialog(requireContext()).apply {
+        Dialog(requireContext()).apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             setContentView(dialogBinding.root)
-            setCancelable(true)
-        }
-
-        dialog.window?.let { win ->
-            win.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
-            val lp = WindowManager.LayoutParams().apply {
-                copyFrom(win.attributes)
-                width = WindowManager.LayoutParams.WRAP_CONTENT
-                height = WindowManager.LayoutParams.WRAP_CONTENT
-            }
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
             dialogBinding.yes.setOnClickListener { requireActivity().finish() }
-            dialogBinding.no.setOnClickListener { dialog.cancel() }
-            dialog.show()
-            win.attributes = lp
+            dialogBinding.no.setOnClickListener { dismiss() }
+            show()
         }
     }
 
     private fun showAboutAccountDialog(username: String?, email: String?) {
         val dialogBinding = DialogAboutAccountBinding.inflate(layoutInflater)
-        val dialog = Dialog(requireContext()).apply {
+        Dialog(requireContext()).apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             setContentView(dialogBinding.root)
-            setCancelable(true)
-        }
-
-        dialog.window?.let { win ->
-            win.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
-            val lp = WindowManager.LayoutParams().apply {
-                copyFrom(win.attributes)
-                width = WindowManager.LayoutParams.WRAP_CONTENT
-                height = WindowManager.LayoutParams.WRAP_CONTENT
-            }
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
             dialogBinding.username.text = username
             dialogBinding.email.text = email
-            dialog.show()
-            win.attributes = lp
+            show()
         }
     }
 

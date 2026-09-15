@@ -47,13 +47,19 @@ class NoteDetailsFragment : Fragment() {
         binding.description.text = noteContent
         binding.description.setBackgroundColor(ContextCompat.getColor(requireContext(), colorRes))
 
-        binding.toolbar.edit.setOnClickListener {
+        binding.toolbar.image.visibility = View.VISIBLE
+        binding.toolbar.image.setImageResource(R.drawable.ic_edit)
+        binding.toolbar.image.setOnClickListener {
             val bundle = Bundle().apply {
                 putString(DATA.TITLE, noteTitle)
                 putString(DATA.CONTENT, noteContent)
                 putString(DATA.ID_PATH, docId)
             }
             findNavController().navigate(R.id.action_noteDetailsFragment_to_editNoteFragment, bundle)
+        }
+
+        binding.toolbar.add.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
