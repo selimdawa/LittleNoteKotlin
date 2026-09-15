@@ -6,6 +6,7 @@ import com.flatcode.littlenote.data.repository.AuthRepository
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -99,6 +100,17 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun checkUserAndRedirect(delay: Long) {
+        viewModelScope.launch {
+            delay(delay)
+            if (currentUser != null) {
+                _authStatus.value = AuthResult.Authenticated
+            } else {
+                signInAnonymously()
+            }
+        }
+    }
+
     fun signOut() {
         Timber.d("Signing out")
         repository.signOut()
@@ -107,6 +119,7 @@ class AuthViewModel @Inject constructor(
     sealed class AuthResult {
         object Idle : AuthResult()
         object Loading : AuthResult()
+        object Authenticated : AuthResult()
         data class Success(val message: String) : AuthResult()
         data class Error(val message: String) : AuthResult()
     }

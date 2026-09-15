@@ -19,7 +19,9 @@ class NoteAdapter(
     private val context: Context,
     options: FirestoreRecyclerOptions<Note>,
     private val onNotesCountChanged: (Int) -> Unit,
-    private val onDeleteClicked: (String) -> Unit
+    private val onDeleteClicked: (String) -> Unit,
+    private val onItemClicked: (Note, String, Int) -> Unit,
+    private val onEditClicked: (Note, String) -> Unit
 ) : FirestoreRecyclerAdapter<Note, NoteAdapter.NoteViewHolder>(options) {
 
     override fun onBindViewHolder(noteViewHolder: NoteViewHolder, i: Int, note: Note) {
@@ -33,10 +35,7 @@ class NoteAdapter(
 
         val docId = snapshots.getSnapshot(i).id
         binding.root.setOnClickListener {
-            VOID.IntentExtraDetails(
-                context, CLASS.DETAILS, DATA.TITLE, note, DATA.CONTENT, note,
-                DATA.COLOR, code, DATA.ID_PATH, docId
-            )
+            onItemClicked(note, docId, code)
         }
 
         binding.menuIcon.setOnClickListener { v ->
@@ -45,10 +44,7 @@ class NoteAdapter(
             }
 
             menu.menu.add(DATA.EDIT).setOnMenuItemClickListener {
-                VOID.IntentExtraDetails(
-                    context, CLASS.EDIT,
-                    DATA.TITLE, note, DATA.CONTENT, note, null, 0, DATA.ID_PATH, docId
-                )
+                onEditClicked(note, docId)
                 false
             }
 

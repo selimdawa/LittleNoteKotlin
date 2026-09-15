@@ -1,51 +1,58 @@
 package com.flatcode.littlenote.ui.auth
 
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.flatcode.littlenote.R
 import com.flatcode.littlenote.databinding.ActivityRegisterBinding
-import com.flatcode.littlenote.utils.CLASS
 import com.flatcode.littlenote.utils.DATA
-import com.flatcode.littlenote.utils.VOID
 import com.flatcode.littlenote.viewmodel.AuthViewModel
 import com.google.firebase.auth.EmailAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RegisterActivity : AppCompatActivity() {
+class RegisterFragment : Fragment() {
 
     private var _binding: ActivityRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private val context: Context = this@RegisterActivity
     private val viewModel: AuthViewModel by viewModels()
 
     private val progressDialog: AlertDialog by lazy {
-        AlertDialog.Builder(context)
+        AlertDialog.Builder(requireContext())
             .setTitle("Please wait...")
-            .setView(ProgressBar(context).apply {
+            .setView(ProgressBar(requireContext()).apply {
                 setPadding(50, 50, 50, 50)
             })
             .setCancelable(false)
             .create()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _binding = ActivityRegisterBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ActivityRegisterBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        binding.login.setOnClickListener { VOID.Intent1(context, CLASS.LOGIN) }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.login.setOnClickListener {
+            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+        }
 
         binding.go.setOnClickListener {
             val username = binding.nameEt.text.toString()
@@ -68,8 +75,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.authStatus.collect { result ->
                     when (result) {
                         is AuthViewModel.AuthResult.Loading -> {
@@ -79,9 +86,7 @@ class RegisterActivity : AppCompatActivity() {
                         is AuthViewModel.AuthResult.Success -> {
                             progressDialog.dismiss()
                             showToast(result.message)
-                            VOID.Intent1(context, CLASS.HOME)
-                            applyTransition()
-                            finish()
+                            findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
                         }
                         is AuthViewModel.AuthResult.Error -> {
                             progressDialog.dismiss()
@@ -95,24 +100,11 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun applyTransition() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            overrideActivityTransition(
-                OVERRIDE_TRANSITION_OPEN,
-                R.anim.slide_up,
-                R.anim.slide_down
-            )
-        } else {
-            @Suppress("DEPRECATION")
-            overridePendingTransition(R.anim.slide_up, R.anim.slide_down)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 }

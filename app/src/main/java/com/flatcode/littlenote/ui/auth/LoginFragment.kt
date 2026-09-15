@@ -1,46 +1,52 @@
 package com.flatcode.littlenote.ui.auth
 
-import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.flatcode.littlenote.R
 import com.flatcode.littlenote.databinding.ActivityLoginBinding
-import com.flatcode.littlenote.utils.CLASS
-import com.flatcode.littlenote.utils.VOID
 import com.flatcode.littlenote.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
+class LoginFragment : Fragment() {
 
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
 
-    private val context: Context = this@LoginActivity
     private val viewModel: AuthViewModel by viewModels()
 
     private val progressDialog: AlertDialog by lazy {
-        AlertDialog.Builder(context)
+        AlertDialog.Builder(requireContext())
             .setTitle("Please wait...")
-            .setView(ProgressBar(context).apply {
+            .setView(ProgressBar(requireContext()).apply {
                 setPadding(50, 50, 50, 50)
             })
             .setCancelable(false)
             .create()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ActivityLoginBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         showWarning()
 
@@ -56,15 +62,19 @@ class LoginActivity : AppCompatActivity() {
             viewModel.signIn(email, password)
         }
 
-        binding.forget.setOnClickListener { VOID.Intent1(context, CLASS.FORGET_PASSWORD) }
-        binding.noAccount.setOnClickListener { VOID.Intent1(context, CLASS.REGISTER) }
+        binding.forget.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_forgetPasswordFragment)
+        }
+        binding.noAccount.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
 
         observeViewModel()
     }
 
     private fun observeViewModel() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.authStatus.collect { result ->
                     when (result) {
                         is AuthViewModel.AuthResult.Loading -> {
@@ -74,8 +84,7 @@ class LoginActivity : AppCompatActivity() {
                         is AuthViewModel.AuthResult.Success -> {
                             progressDialog.dismiss()
                             showToast(result.message)
-                            VOID.IntentClear(context, CLASS.HOME)
-                            finish()
+                            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                         }
                         is AuthViewModel.AuthResult.Error -> {
                             progressDialog.dismiss()
@@ -89,23 +98,22 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showWarning() {
-        AlertDialog.Builder(context)
+        AlertDialog.Builder(requireContext())
             .setTitle(R.string.alert_delete_title)
             .setMessage(R.string.alert_login_message)
             .setPositiveButton(R.string.alert_login_positive) { _, _ ->
-                VOID.Intent1(context, CLASS.REGISTER)
-                finish()
+                findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }
             .setNegativeButton(R.string.alert_login_negative) { _, _ -> }
             .show()
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 }
