@@ -81,6 +81,10 @@ dependencies {
     // AppFunctions
     implementation(libs.androidx.appfunctions)
     ksp(libs.androidx.appfunctions.compiler)
+    // WorkManager
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
 }
 
 ksp {

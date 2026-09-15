@@ -11,5 +11,6 @@ data class Note(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     var remoteId: String? = null,
     var title: String? = null,
-    var content: String? = null
+    var content: String? = null,
+    var isSynced: Boolean = true
 ) : Parcelable

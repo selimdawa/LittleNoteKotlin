@@ -2,6 +2,7 @@ package com.flatcode.littlenote.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.flatcode.littlenote.data.dao.NoteDao
 import com.flatcode.littlenote.data.database.AppDatabase
 import com.google.firebase.auth.FirebaseAuth
@@ -38,4 +39,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideNoteDao(database: AppDatabase): NoteDao = database.noteDao()
+
+    @Provides
+    @Singleton
+    fun provideWorkManager(@ApplicationContext context: Context): WorkManager =
+        WorkManager.getInstance(context)
 }

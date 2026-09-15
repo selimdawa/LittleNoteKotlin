@@ -26,4 +26,10 @@ interface NoteDao {
 
     @Query("SELECT * FROM notes WHERE remoteId = :remoteId")
     suspend fun getNoteByRemoteId(remoteId: String): Note?
+
+    @Query("SELECT * FROM notes WHERE isSynced = 0")
+    suspend fun getUnsyncedNotes(): List<Note>
+
+    @Query("DELETE FROM notes")
+    suspend fun deleteAllNotes()
 }
