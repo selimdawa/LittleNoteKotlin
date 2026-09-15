@@ -15,41 +15,26 @@ android {
         applicationId = "com.flatcode.littlenote"
         minSdk = 24
         targetSdk = 37
-        versionCode = 6
-        versionName = "1.30"
+        versionCode = 7
+        versionName = "1.31"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    //signingConfigs {
-    //    create("release") {
-    //        storeFile = file("D:\\MyProjects\\Kotlin\\Little Note\\Little Note\\LittleNote.jks")
-    //        storePassword = "00000000"
-    //        keyAlias = "LittleNote"
-    //        keyPassword = "00000000"
-    //    }
-    //}
     buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            )
-        }
+    release {
+        isMinifyEnabled = true
+        isShrinkResources = true
+        proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            "proguard-rules.pro"
+        )
+        signingConfig = signingConfigs.getByName("debug")
     }
-    //buildTypes {
-    //    getByName("release") {
-    //        signingConfig = signingConfigs.getByName("release")
-    //        isMinifyEnabled = true
-    //        isShrinkResources = true
-    //        proguardFiles(
-    //            getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-    //        )
-    //    }
-    //}
+}
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     buildFeatures {
         viewBinding = true
@@ -76,7 +61,6 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.firestore)                //Firebase Fire Store
-    implementation(libs.firebase.ui.firestore)             //Firebase Store UI
     // Architecture Components & MVVM
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     // Coroutines
@@ -90,7 +74,6 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     // Room Database
     implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
     //Other
     implementation(libs.timber)
