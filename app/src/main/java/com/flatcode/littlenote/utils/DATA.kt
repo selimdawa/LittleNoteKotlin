@@ -21,7 +21,6 @@ object DATA {
     const val DELETE = "Delete"
     const val ERR_PASS = "Password Do not Match."
 
-    const val COLOR_OPTION = "color_option"
     const val BASIC = "basic"
 
     val AUTH: FirebaseAuth get() = FirebaseAuth.getInstance()

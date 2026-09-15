@@ -11,9 +11,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.flatcode.littlenote.data.model.Note
 import com.flatcode.littlenote.databinding.ItemNoteBinding
-import com.flatcode.littlenote.utils.CLASS
 import com.flatcode.littlenote.utils.DATA
-import com.flatcode.littlenote.utils.VOID
 
 class NoteAdapter(
     private val context: Context,

@@ -1,12 +1,17 @@
 package com.flatcode.littlenote.ui.home
 
+import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -18,9 +23,10 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.flatcode.littlenote.R
 import com.flatcode.littlenote.data.model.Note
 import com.flatcode.littlenote.databinding.ActivityHomeBinding
+import com.flatcode.littlenote.databinding.DialogAboutAccountBinding
+import com.flatcode.littlenote.databinding.DialogCloseAppBinding
 import com.flatcode.littlenote.ui.adapter.NoteAdapter
 import com.flatcode.littlenote.utils.DATA
-import com.flatcode.littlenote.utils.VOID
 import com.flatcode.littlenote.viewmodel.AuthViewModel
 import com.flatcode.littlenote.viewmodel.HomeViewModel
 import com.flatcode.littlenote.viewmodel.NoteViewModel
@@ -53,7 +59,7 @@ class HomeFragment : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                VOID.closeApp(requireContext(), requireActivity())
+                showCloseAppDialog()
             }
         })
 
@@ -87,8 +93,52 @@ class HomeFragment : Fragment() {
         binding.toolbar.logout.setOnClickListener { checkUser() }
         binding.toolbar.info.setOnClickListener {
             currentUser?.let {
-                VOID.aboutAccount(requireContext(), it.displayName, it.email)
+                showAboutAccountDialog(it.displayName, it.email)
             }
+        }
+    }
+
+    private fun showCloseAppDialog() {
+        val dialogBinding = DialogCloseAppBinding.inflate(layoutInflater)
+        val dialog = Dialog(requireContext()).apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            setContentView(dialogBinding.root)
+            setCancelable(true)
+        }
+
+        dialog.window?.let { win ->
+            win.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+            val lp = WindowManager.LayoutParams().apply {
+                copyFrom(win.attributes)
+                width = WindowManager.LayoutParams.WRAP_CONTENT
+                height = WindowManager.LayoutParams.WRAP_CONTENT
+            }
+            dialogBinding.yes.setOnClickListener { requireActivity().finish() }
+            dialogBinding.no.setOnClickListener { dialog.cancel() }
+            dialog.show()
+            win.attributes = lp
+        }
+    }
+
+    private fun showAboutAccountDialog(username: String?, email: String?) {
+        val dialogBinding = DialogAboutAccountBinding.inflate(layoutInflater)
+        val dialog = Dialog(requireContext()).apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            setContentView(dialogBinding.root)
+            setCancelable(true)
+        }
+
+        dialog.window?.let { win ->
+            win.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+            val lp = WindowManager.LayoutParams().apply {
+                copyFrom(win.attributes)
+                width = WindowManager.LayoutParams.WRAP_CONTENT
+                height = WindowManager.LayoutParams.WRAP_CONTENT
+            }
+            dialogBinding.username.text = username
+            dialogBinding.email.text = email
+            dialog.show()
+            win.attributes = lp
         }
     }
 
