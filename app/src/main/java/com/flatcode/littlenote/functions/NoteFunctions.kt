@@ -28,9 +28,9 @@ class NoteFunctions @Inject constructor(
         title: String,
         content: String
     ): String {
-        val uid = authRepository.currentUser?.uid ?: return "User not logged in"
+        authRepository.currentUser?.uid ?: return "User not logged in"
         val note = Note(title = title, content = content)
-        noteRepository.addNote(uid, note)
+        noteRepository.addNote(note)
         return "Note added successfully"
     }
 }

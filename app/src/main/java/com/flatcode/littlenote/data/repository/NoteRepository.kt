@@ -15,16 +15,16 @@ import javax.inject.Singleton
 class NoteRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val noteDao: NoteDao,
-    private val workManager: WorkManager
+    private val workManager: WorkManager,
 ) {
     fun getAllNotes() = noteDao.getAllNotes()
 
-    suspend fun addNote(uid: String, note: Note) {
+    suspend fun addNote(note: Note) {
         noteDao.insertNote(note.copy(isSynced = false))
         scheduleSync()
     }
 
-    suspend fun editNote(uid: String, note: Note) {
+    suspend fun editNote(note: Note) {
         noteDao.updateNote(note.copy(isSynced = false))
         scheduleSync()
     }

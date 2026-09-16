@@ -13,10 +13,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.flatcode.littlenote.R
 import com.flatcode.littlenote.databinding.FragmentSplashBinding
+import com.flatcode.littlenote.utils.BiometricHelper
 import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
@@ -37,7 +39,7 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         observeAuthStatus()
-        viewModel.checkUserAndRedirect(DATA.DELAY_LOG.toLong())
+        viewModel.checkUserAndRedirect(DATA.DELAY_LOG.milliseconds)
     }
 
     private fun observeAuthStatus() {
@@ -46,7 +48,7 @@ class SplashFragment : Fragment() {
                 viewModel.authStatus.collect { result ->
                     when (result) {
                         is AuthViewModel.AuthResult.Authenticated -> {
-                            goToHome()
+                            checkBiometricAndNavigate()
                         }
                         is AuthViewModel.AuthResult.Success -> {
                             if (result.message == "Anonymous Login Successful") {
@@ -66,6 +68,25 @@ class SplashFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun checkBiometricAndNavigate() {
+        if (BiometricHelper.isBiometricAvailable(requireContext())) {
+            BiometricHelper.showBiometricPrompt(
+                activity = requireActivity(),
+                onSuccess = {
+                    goToHome()
+                },
+                onError = { error ->
+                    Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+                    binding.root.setOnClickListener {
+                        checkBiometricAndNavigate()
+                    }
+                }
+            )
+        } else {
+            goToHome()
         }
     }
 

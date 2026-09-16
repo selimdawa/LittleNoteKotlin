@@ -26,12 +26,12 @@ class NoteViewModel @Inject constructor(
         noteRepository.getAllNotes().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun addNote(title: String, content: String) {
-        val uid = authRepository.currentUser?.uid ?: return
+        authRepository.currentUser?.uid ?: return
         val note = Note(title = title, content = content)
         _noteStatus.value = NoteResult.Loading
         viewModelScope.launch {
             try {
-                noteRepository.addNote(uid, note)
+                noteRepository.addNote(note)
                 _noteStatus.value = NoteResult.Success("Note Added Successfully")
             } catch (e: Exception) {
                 _noteStatus.value = NoteResult.Error(e.message ?: "Failed to add note")
@@ -40,11 +40,11 @@ class NoteViewModel @Inject constructor(
     }
 
     fun editNote(note: Note) {
-        val uid = authRepository.currentUser?.uid ?: return
+        authRepository.currentUser?.uid ?: return
         _noteStatus.value = NoteResult.Loading
         viewModelScope.launch {
             try {
-                noteRepository.editNote(uid, note)
+                noteRepository.editNote(note)
                 _noteStatus.value = NoteResult.Success("Note Updated Successfully")
             } catch (e: Exception) {
                 _noteStatus.value = NoteResult.Error(e.message ?: "Failed to update note")
