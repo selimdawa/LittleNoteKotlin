@@ -2,25 +2,26 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card"
+    style="?attr/materialCardViewElevatedStyle"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
-    android:layout_margin="10dp"
+    android:layout_height="@dimen/toolbar_height"
+    android:layout_margin="@dimen/spacing_10"
     android:visibility="visible"
-    app:cardCornerRadius="6dp"
+    app:cardCornerRadius="@dimen/card_corner_radius_small"
     app:strokeWidth="0dp">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?mc_bg"
         android:visibility="visible">
 
         <LinearLayout
-            android:layout_width="30dp"
-            android:layout_height="30sp"
-            android:layout_gravity="left"
-            android:layout_marginRight="10dp"
-            android:gravity="left">
+            android:layout_width="@dimen/spacing_30"
+            android:layout_height="@dimen/spacing_30"
+            android:layout_gravity="start"
+            android:layout_marginEnd="@dimen/spacing_10"
+            android:gravity="start">
 
             <io.selimdawa.multicolors.MultiColorButton
                 android:layout_width="@dimen/spacing_30"
@@ -30,10 +31,11 @@
 
         <ImageView
             android:id="@+id/add"
-            android:layout_width="30sp"
-            android:layout_height="30sp"
-            android:layout_gravity="left"
-            android:layout_marginRight="15sp"
+            android:layout_width="@dimen/spacing_30"
+            android:layout_height="@dimen/spacing_30"
+            android:layout_gravity="start"
+            android:layout_marginEnd="@dimen/spacing_15"
+            android:contentDescription="@string/cd_add"
             android:src="@drawable/ic_add_circle"
             app:tint="@color/white" />
 
@@ -43,60 +45,66 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingRight="95sp">
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/toolbar_padding_end">
 
             <TextView
                 android:id="@+id/nameSpace"
+                style="@style/TextAppearance.Material3.TitleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/my_notes"
                 android:textColor="@color/white"
-                android:textSize="21sp"
+                android:textSize="@dimen/text_size_21"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/number"
+                style="@style/TextAppearance.Material3.TitleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="21sp"
+                android:textSize="@dimen/text_size_21"
                 android:textStyle="bold" />
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/info"
-            android:layout_width="30sp"
-            android:layout_height="30sp"
-            android:layout_gravity="right"
-            android:layout_marginRight="15sp"
+            android:layout_width="@dimen/spacing_30"
+            android:layout_height="@dimen/spacing_30"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/spacing_15"
+            android:contentDescription="@string/cd_info"
             android:src="@drawable/ic_info"
             android:visibility="gone"
             app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/sync"
-            android:layout_width="30sp"
-            android:layout_height="30sp"
-            android:layout_gravity="right"
-            android:layout_marginRight="15sp"
+            android:layout_width="@dimen/spacing_30"
+            android:layout_height="@dimen/spacing_30"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/spacing_15"
+            android:contentDescription="@string/cd_sync"
             android:src="@drawable/ic_sync"
             android:visibility="visible"
             app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/logout"
-            android:layout_width="30sp"
-            android:layout_height="30sp"
-            android:layout_gravity="right"
-            android:layout_marginRight="15sp"
+            android:layout_width="@dimen/spacing_30"
+            android:layout_height="@dimen/spacing_30"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/spacing_15"
+            android:contentDescription="@string/cd_logout"
             android:src="@drawable/ic_logout"
             app:tint="@color/white" />
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.MaterialToolbar>
 
 </com.google.android.material.card.MaterialCardView>

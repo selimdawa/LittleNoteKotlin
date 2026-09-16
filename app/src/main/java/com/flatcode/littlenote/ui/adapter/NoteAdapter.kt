@@ -1,10 +1,13 @@
 package com.flatcode.littlenote.ui.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -39,21 +42,41 @@ class NoteAdapter(
             onItemClicked(note, code)
         }
 
-        binding.menuIcon.setOnClickListener { v ->
-            val menu = PopupMenu(v.context, v).apply {
-                gravity = Gravity.END
-            }
+        var isIconClicked = false
+        @SuppressLint("ClickableViewAccessibility")
+        binding.description.setOnTouchListener { v, event ->
+            val textView = v as TextView
+            val drawableEnd = textView.compoundDrawablesRelative[2]
+            if (drawableEnd != null) {
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    val iconStartX = textView.width - textView.totalPaddingEnd - 30
+                    isIconClicked = event.x >= iconStartX
+                }
+                if (isIconClicked) {
+                    if (event.action == MotionEvent.ACTION_UP) {
+                        val iconStartX = textView.width - textView.totalPaddingEnd - 30
+                        if (event.x >= iconStartX) {
+                            val menu = PopupMenu(v.context, v).apply {
+                                gravity = Gravity.END
+                            }
 
-            menu.menu.add(DATA.EDIT).setOnMenuItemClickListener {
-                onEditClicked(note)
-                false
-            }
+                            menu.menu.add(DATA.EDIT).setOnMenuItemClickListener {
+                                onEditClicked(note)
+                                false
+                            }
 
-            menu.menu.add(DATA.DELETE).setOnMenuItemClickListener {
-                onDeleteClicked(note)
-                false
+                            menu.menu.add(DATA.DELETE).setOnMenuItemClickListener {
+                                onDeleteClicked(note)
+                                false
+                            }
+                            menu.show()
+                        }
+                        isIconClicked = false
+                    }
+                    return@setOnTouchListener true
+                }
             }
-            menu.show()
+            false
         }
     }
 

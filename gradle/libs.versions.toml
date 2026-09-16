@@ -21,8 +21,8 @@ navigation = "2.10.1"
 room = "2.8.5"
 ksp = "2.3.11"
 appfunctions = "1.0.0-alpha11"
-work = "2.10.0"
-hiltWork = "1.2.0"
+work = "2.11.2"
+hiltWork = "1.4.0"
 biometric = "1.2.0-alpha05"
 
 [libraries]

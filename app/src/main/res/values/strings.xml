@@ -2,7 +2,7 @@
     <string name="app_name">Little Note</string>
     <string name="username">Username</string>
     <string name="email_example">abc@example.com</string>
-    <string name="new_user_signup">SignUp</string>
+    <string name="new_user_signup">New User? SignUp</string>
     <string name="forget_password">Forget Password?</string>
     <string name="title_activity_note_details">NoteDetails</string>
     <string name="title_activity_add_note">AddNote</string>
@@ -38,7 +38,16 @@
     <string name="email">Email</string>
     <string name="description_here">Description Here</string>
     <string name="title_here">Title Here</string>
-    //Close App
+    <string name="cd_back">Back</string>
+    <string name="cd_login">Login</string>
+    <string name="cd_register">Register</string>
+    <string name="cd_more">More options</string>
+    <string name="cd_add">Add note</string>
+    <string name="cd_info">Info</string>
+    <string name="cd_sync">Sync</string>
+    <string name="cd_logout">Logout</string>
+    <string name="cd_reset_password">Reset Password</string>
+    <string name="password_hint">********</string>
     <string name="do_you_want_to_exit">Do you want to Exit ?</string>
     <string name="no">NO</string>
     <string name="yes">YES</string>

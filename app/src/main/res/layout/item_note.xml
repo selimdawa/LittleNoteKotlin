@@ -4,10 +4,10 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="5sp"
-    android:layout_marginBottom="10sp"
+    android:layout_marginHorizontal="@dimen/spacing_5_sp"
+    android:layout_marginBottom="@dimen/spacing_10_sp"
     android:background="@android:color/transparent"
-    app:cardCornerRadius="6sp"
+    app:cardCornerRadius="@dimen/card_corner_radius_small"
     app:cardElevation="0sp"
     app:strokeWidth="0dp">
 
@@ -16,53 +16,30 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/overlay_dark_20"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:padding="@dimen/spacing_10_sp"
+            android:text="@string/title_here"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold|italic" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:padding="10sp"
-                android:text="@string/title_here"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold|italic" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearDescription"
+        <TextView
+            android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10sp"
-                android:text="@string/description_here"
-                android:textColor="@color/dark"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/menuIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="5sp"
-                android:src="@drawable/ic_more"
-                app:tint="@color/dark" />
-
-        </LinearLayout>
+            android:padding="@dimen/spacing_10_sp"
+            android:text="@string/description_here"
+            android:textColor="@color/dark"
+            android:textSize="@dimen/text_size_14"
+            android:textStyle="bold"
+            app:drawableEndCompat="@drawable/ic_more"
+            android:drawablePadding="@dimen/spacing_5_sp"
+            app:drawableTint="@color/dark" />
 
     </LinearLayout>
 

@@ -12,7 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="10sp"
+        android:layout_marginHorizontal="@dimen/spacing_10_sp"
         android:orientation="vertical">
 
         <EditText
@@ -25,16 +25,16 @@
             android:gravity="center"
             android:hint="@string/title_here"
             android:inputType="textPersonName"
-            android:padding="10sp"
+            android:padding="@dimen/spacing_10_sp"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
-            android:textSize="21sp"
+            android:textSize="@dimen/text_size_21"
             android:textStyle="bold" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginVertical="10sp"
+            android:layout_marginVertical="@dimen/spacing_10_sp"
             android:background="@drawable/button4"
             android:orientation="vertical">
 
@@ -42,7 +42,7 @@
                 android:id="@+id/noteContent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="5sp"
+                android:layout_margin="@dimen/spacing_5_sp"
                 android:backgroundTint="@android:color/transparent"
                 android:ems="10"
                 android:gravity="start|top"
@@ -50,14 +50,14 @@
                 android:inputType="textMultiLine"
                 android:textColor="?colorError"
                 android:textColorHint="?colorError"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_16"
                 android:textStyle="normal" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyle"
-                android:layout_width="50sp"
-                android:layout_height="50sp"
+                android:layout_width="@dimen/spacing_50_sp"
+                android:layout_height="@dimen/spacing_50_sp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:indeterminateDrawable="@drawable/progress_bar"
