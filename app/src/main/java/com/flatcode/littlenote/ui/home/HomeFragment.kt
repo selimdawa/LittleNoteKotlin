@@ -17,7 +17,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.databinding.ActivityHomeBinding
+import com.flatcode.littlenote.databinding.FragmentHomeBinding
 import com.flatcode.littlenote.databinding.DialogAboutAccountBinding
 import com.flatcode.littlenote.databinding.DialogCloseAppBinding
 import com.flatcode.littlenote.ui.adapter.NoteAdapter
@@ -32,7 +32,7 @@ import java.text.MessageFormat
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    private var _binding: ActivityHomeBinding? = null
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     private var noteAdapter: NoteAdapter? = null
@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 

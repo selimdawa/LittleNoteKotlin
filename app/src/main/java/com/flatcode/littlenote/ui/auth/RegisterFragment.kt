@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.databinding.ActivityRegisterBinding
+import com.flatcode.littlenote.databinding.FragmentRegisterBinding
 import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.viewmodel.AuthViewModel
 import com.google.firebase.auth.EmailAuthProvider
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
 
-    private var _binding: ActivityRegisterBinding? = null
+    private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: AuthViewModel by viewModels()
@@ -43,7 +43,7 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityRegisterBinding.inflate(inflater, container, false)
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
 

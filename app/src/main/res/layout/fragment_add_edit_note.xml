@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorOnBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.note.AddNoteFragment">
 
     <include
         android:id="@+id/toolbar"
@@ -20,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:autofillHints="none"
             android:background="@drawable/button3"
             android:ems="10"
             android:gravity="center"
@@ -43,6 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/spacing_5_sp"
+                android:autofillHints="none"
                 android:backgroundTint="@android:color/transparent"
                 android:ems="10"
                 android:gravity="start|top"

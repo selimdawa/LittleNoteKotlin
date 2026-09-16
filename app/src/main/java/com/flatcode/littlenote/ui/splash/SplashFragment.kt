@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.databinding.ActivitySplashBinding
+import com.flatcode.littlenote.databinding.FragmentSplashBinding
 import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
 
-    private var _binding: ActivitySplashBinding? = null
+    private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AuthViewModel by viewModels()
 
@@ -29,7 +29,7 @@ class SplashFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivitySplashBinding.inflate(inflater, container, false)
+        _binding = FragmentSplashBinding.inflate(inflater, container, false)
         return binding.root
     }
 

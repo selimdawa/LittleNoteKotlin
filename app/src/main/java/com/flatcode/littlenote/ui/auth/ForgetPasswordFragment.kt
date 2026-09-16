@@ -15,7 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.databinding.ActivityForgetPasswordBinding
+import com.flatcode.littlenote.databinding.FragmentForgetPasswordBinding
 import com.flatcode.littlenote.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ForgetPasswordFragment : Fragment() {
 
-    private var _binding: ActivityForgetPasswordBinding? = null
+    private var _binding: FragmentForgetPasswordBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: AuthViewModel by viewModels()
@@ -42,7 +42,7 @@ class ForgetPasswordFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityForgetPasswordBinding.inflate(inflater, container, false)
+        _binding = FragmentForgetPasswordBinding.inflate(inflater, container, false)
         return binding.root
     }
 

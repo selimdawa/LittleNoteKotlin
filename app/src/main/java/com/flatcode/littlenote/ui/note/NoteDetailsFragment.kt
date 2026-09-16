@@ -12,20 +12,20 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.flatcode.littlenote.R
 import com.flatcode.littlenote.data.model.Note
-import com.flatcode.littlenote.databinding.ActivityNoteDetailsBinding
+import com.flatcode.littlenote.databinding.FragmentNoteDetailsBinding
 import com.flatcode.littlenote.utils.DATA
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NoteDetailsFragment : Fragment() {
 
-    private var _binding: ActivityNoteDetailsBinding? = null
+    private var _binding: FragmentNoteDetailsBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityNoteDetailsBinding.inflate(inflater, container, false)
+        _binding = FragmentNoteDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 

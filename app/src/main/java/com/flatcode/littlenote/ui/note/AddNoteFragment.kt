@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.flatcode.littlenote.R
-import com.flatcode.littlenote.databinding.ActivityAddEditNoteBinding
+import com.flatcode.littlenote.databinding.FragmentAddEditNoteBinding
 import com.flatcode.littlenote.viewmodel.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AddNoteFragment : Fragment() {
 
-    private var _binding: ActivityAddEditNoteBinding? = null
+    private var _binding: FragmentAddEditNoteBinding? = null
     private val binding get() = _binding!!
     private val viewModel: NoteViewModel by viewModels()
 
@@ -29,7 +29,7 @@ class AddNoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityAddEditNoteBinding.inflate(inflater, container, false)
+        _binding = FragmentAddEditNoteBinding.inflate(inflater, container, false)
         return binding.root
     }
 

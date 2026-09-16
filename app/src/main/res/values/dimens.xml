@@ -15,7 +15,6 @@
 
     <!-- SP Dimensions (as used in original layouts) -->
     <dimen name="spacing_5_sp">5sp</dimen>
-    <dimen name="spacing_6_sp">6sp</dimen>
     <dimen name="spacing_10_sp">10sp</dimen>
     <dimen name="spacing_15_sp">15sp</dimen>
     <dimen name="spacing_20_sp">20sp</dimen>

@@ -9,7 +9,7 @@
         android:id="@+id/splashFragment"
         android:name="com.flatcode.littlenote.ui.splash.SplashFragment"
         android:label="SplashFragment"
-        tools:layout="@layout/activity_splash">
+        tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_splashFragment_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -21,7 +21,7 @@
         android:id="@+id/homeFragment"
         android:name="com.flatcode.littlenote.ui.home.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/activity_home">
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_splashFragment"
             app:destination="@id/splashFragment"
@@ -48,7 +48,7 @@
         android:id="@+id/loginFragment"
         android:name="com.flatcode.littlenote.ui.auth.LoginFragment"
         android:label="LoginFragment"
-        tools:layout="@layout/activity_login">
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -66,7 +66,7 @@
         android:id="@+id/registerFragment"
         android:name="com.flatcode.littlenote.ui.auth.RegisterFragment"
         android:label="RegisterFragment"
-        tools:layout="@layout/activity_register">
+        tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -81,7 +81,7 @@
         android:id="@+id/forgetPasswordFragment"
         android:name="com.flatcode.littlenote.ui.auth.ForgetPasswordFragment"
         android:label="ForgetPasswordFragment"
-        tools:layout="@layout/activity_forget_password">
+        tools:layout="@layout/fragment_forget_password">
         <action
             android:id="@+id/action_forgetPasswordFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
@@ -94,19 +94,19 @@
         android:id="@+id/addNoteFragment"
         android:name="com.flatcode.littlenote.ui.note.AddNoteFragment"
         android:label="AddNoteFragment"
-        tools:layout="@layout/activity_add_edit_note" />
+        tools:layout="@layout/fragment_add_edit_note" />
 
     <fragment
         android:id="@+id/editNoteFragment"
         android:name="com.flatcode.littlenote.ui.note.EditNoteFragment"
         android:label="EditNoteFragment"
-        tools:layout="@layout/activity_add_edit_note" />
+        tools:layout="@layout/fragment_add_edit_note" />
 
     <fragment
         android:id="@+id/noteDetailsFragment"
         android:name="com.flatcode.littlenote.ui.note.NoteDetailsFragment"
         android:label="NoteDetailsFragment"
-        tools:layout="@layout/activity_note_details">
+        tools:layout="@layout/fragment_note_details">
         <action
             android:id="@+id/action_noteDetailsFragment_to_editNoteFragment"
             app:destination="@id/editNoteFragment" />
