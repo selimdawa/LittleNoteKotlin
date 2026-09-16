@@ -14,13 +14,20 @@ import com.flatcode.littlenote.R
 import com.flatcode.littlenote.data.model.Note
 import com.flatcode.littlenote.databinding.FragmentNoteDetailsBinding
 import com.flatcode.littlenote.utils.DATA
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.flatcode.littlenote.viewmodel.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NoteDetailsFragment : Fragment() {
 
     private var _binding: FragmentNoteDetailsBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: NoteViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -42,20 +49,22 @@ class NoteDetailsFragment : Fragment() {
         val note = arguments?.let {
             BundleCompat.getParcelable(it, DATA.NOTE, Note::class.java)
         }
+        var currentNote = note
+        val noteId = note?.id ?: -1
 
         val colorRes = arguments?.getInt(DATA.COLOR, DATA.DEFAULT_COLOR) ?: DATA.DEFAULT_COLOR
 
         binding.run {
-            toolbar.nameSpace.text = note?.title
+            toolbar.nameSpace.text = currentNote?.title
             description.movementMethod = ScrollingMovementMethod()
-            description.text = note?.content
+            description.text = currentNote?.content
             description.setBackgroundColor(ContextCompat.getColor(requireContext(), colorRes))
 
             toolbar.image.visibility = View.VISIBLE
             toolbar.image.setImageResource(R.drawable.ic_edit)
             toolbar.image.setOnClickListener {
                 val bundle = Bundle().apply {
-                    putParcelable(DATA.NOTE, note)
+                    putParcelable(DATA.NOTE, currentNote)
                 }
                 findNavController().navigate(
                     R.id.action_noteDetailsFragment_to_editNoteFragment, bundle
@@ -64,6 +73,19 @@ class NoteDetailsFragment : Fragment() {
 
             toolbar.add.setOnClickListener {
                 findNavController().popBackStack()
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.allNotes.collect { notes ->
+                    val updatedNote = notes.find { it.id == noteId }
+                    if (updatedNote != null) {
+                        currentNote = updatedNote
+                        binding.toolbar.nameSpace.text = updatedNote.title
+                        binding.description.text = updatedNote.content
+                    }
+                }
             }
         }
     }

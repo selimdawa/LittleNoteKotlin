@@ -12,6 +12,4 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val currentUser: FirebaseUser? get() = authRepository.currentUser
-
-    fun signOut() = authRepository.signOut()
 }

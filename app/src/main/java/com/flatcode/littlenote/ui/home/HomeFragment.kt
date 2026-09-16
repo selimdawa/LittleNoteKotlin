@@ -180,7 +180,7 @@ class HomeFragment : Fragment() {
         if (currentUser != null && currentUser.isAnonymous) {
             displayAlert()
         } else {
-            homeViewModel.signOut()
+            authViewModel.signOut()
             findNavController().navigate(R.id.action_homeFragment_to_splashFragment)
         }
     }

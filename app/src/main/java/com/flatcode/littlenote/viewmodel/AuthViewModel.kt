@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.Duration
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
@@ -100,7 +101,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun checkUserAndRedirect(delay: Long) {
+    fun checkUserAndRedirect(delay: Duration) {
         viewModelScope.launch {
             delay(delay)
             if (currentUser != null) {
