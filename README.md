@@ -97,13 +97,13 @@ app/src/main/java/com/flatcode/littlenote/
 
 ### Prerequisites
 *   Android Studio Ladybug or newer.
-*   JDK 17.
+*   JDK 21.
 *   Android SDK Level 37 (Compile SDK).
 
 ### Installation
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/selimdawa/LittleNote-Kotlin.git
+    git clone https://github.com/selimdawa/LittleNoteKotlin.git
     ```
 2.  Open the project in Android Studio.
 3.  Sync Project with Gradle Files.
