@@ -4,7 +4,7 @@
 
     <stroke
         android:width="1sp"
-        android:color="?mc_tick" />
+        android:color="?mc_track" />
 
     <corners
         android:bottomLeftRadius="0sp"

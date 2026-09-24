@@ -1,11 +1,9 @@
 package com.flatcode.littlenote.ui.home
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
@@ -18,10 +16,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.flatcode.littlenote.R
 import com.flatcode.littlenote.databinding.FragmentHomeBinding
-import com.flatcode.littlenote.databinding.DialogAboutAccountBinding
-import com.flatcode.littlenote.databinding.DialogCloseAppBinding
 import com.flatcode.littlenote.ui.adapter.NoteAdapter
 import com.flatcode.littlenote.utils.DATA
+import com.flatcode.littlenote.utils.dialogAboutAccount
+import com.flatcode.littlenote.utils.dialogCloseApp
 import com.flatcode.littlenote.viewmodel.AuthViewModel
 import com.flatcode.littlenote.viewmodel.HomeViewModel
 import com.flatcode.littlenote.viewmodel.NoteViewModel
@@ -42,8 +40,7 @@ class HomeFragment : Fragment() {
     private val noteViewModel: NoteViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -52,16 +49,17 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                showCloseAppDialog()
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireContext().dialogCloseApp()
+                }
+            })
 
         setupToolbar()
         setupRecyclerView()
         observeViewModels()
-        
+
         noteViewModel.syncNotes()
     }
 
@@ -91,33 +89,9 @@ class HomeFragment : Fragment() {
             logout.setOnClickListener { checkUser() }
             info.setOnClickListener {
                 currentUser?.let {
-                    showAboutAccountDialog(it.displayName, it.email)
+                    requireContext().dialogAboutAccount(it.displayName, it.email)
                 }
             }
-        }
-    }
-
-    private fun showCloseAppDialog() {
-        val dialogBinding = DialogCloseAppBinding.inflate(layoutInflater)
-        Dialog(requireContext()).apply {
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
-            setContentView(dialogBinding.root)
-            window?.setBackgroundDrawableResource(android.R.color.transparent)
-            dialogBinding.yes.setOnClickListener { requireActivity().finish() }
-            dialogBinding.no.setOnClickListener { dismiss() }
-            show()
-        }
-    }
-
-    private fun showAboutAccountDialog(username: String?, email: String?) {
-        val dialogBinding = DialogAboutAccountBinding.inflate(layoutInflater)
-        Dialog(requireContext()).apply {
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
-            setContentView(dialogBinding.root)
-            window?.setBackgroundDrawableResource(android.R.color.transparent)
-            dialogBinding.username.text = username
-            dialogBinding.email.text = email
-            show()
         }
     }
 
@@ -186,13 +160,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun displayAlert() {
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.alert_delete_title)
+        AlertDialog.Builder(requireContext()).setTitle(R.string.alert_delete_title)
             .setMessage(R.string.alert_delete_message)
             .setPositiveButton(R.string.alert_delete_positive) { _, _ ->
                 findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
-            }
-            .setNegativeButton(R.string.alert_delete_negative) { _, _ ->
+            }.setNegativeButton(R.string.alert_delete_negative) { _, _ ->
                 authViewModel.deleteAnonymousUser(homeViewModel.currentUser?.uid ?: "")
             }.show()
     }
