@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    requireContext().dialogCloseApp()
+                    requireActivity().dialogCloseApp()
                 }
             })
 
