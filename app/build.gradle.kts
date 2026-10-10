@@ -16,8 +16,8 @@ android {
         applicationId = "com.flatcode.littlenote"
         minSdk = 24
         targetSdk = 37
-        versionCode = 7
-        versionName = "1.31"
+        versionCode = 8
+        versionName = "1.32"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
