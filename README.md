@@ -13,7 +13,7 @@
 
 ---
 
-## ðŸ“± Screenshots
+## 📱 Screenshots
 
 ### Day Mode
 Splash | Save Note | Login 
@@ -43,7 +43,7 @@ Add/Edit Note | Details | Login Note
 
 ---
 
-### âœ¨ Core Functionalities
+### ✨ Core Functionalities
 *   **Robust Authentication Flow**: Secure identity management via **Firebase Authentication**.
 *   **Dynamic Note Orchestration**: Full CRUD operations for managing personal records through a refined interface.
 *   **Granular Privacy Controls**: Secure sensitive content using specialized **Private Note** lockers.
@@ -55,7 +55,7 @@ Add/Edit Note | Details | Login Note
 
 ---
 
-## ðŸ› ï¸ Built With
+## 🛠️ Built With
 *   **Language:** [Kotlin](https://kotlinlang.org/)
 *   **UI Framework:** Material Design 3, ViewBinding
 *   **Database:** [Room](https://developer.android.com/training/data-storage/room)
@@ -68,32 +68,32 @@ Add/Edit Note | Details | Login Note
 
 ---
 
-### ðŸ—ï¸ Technical Architecture
+### 🏗️ Technical Architecture
 The application is engineered using **MVVM (Model-View-ViewModel)** architectural patterns, strictly adhering to **Clean Architecture** principles to promote modularity and ease of maintenance.
 
 ```text
 app/src/main/java/com/flatcode/littlenote/
-â”œâ”€â”€ di/                 # Dependency Injection (Hilt modules)
-â”œâ”€â”€ ui/                 # Presentation Layer
-â”‚   â”œâ”€â”€ auth/           # Authentication (Login, Register, Forget Password)
-â”‚   â”œâ”€â”€ home/           # Dashboard and Navigation
-â”‚   â”œâ”€â”€ note/           # Note Operations (Add, Edit, View, Details)
-â”‚   â”œâ”€â”€ splash/         # App Entry Point
-â”‚   â””â”€â”€ adapter/        # RecyclerView Adapters
-â”œâ”€â”€ viewmodel/          # Logic Layer (State Management & UI Logic)
-â”œâ”€â”€ data/               # Data Layer (Local & Remote)
-â”‚   â”œâ”€â”€ dao/            # Room Database DAOs
-â”‚   â”œâ”€â”€ model/          # Data Entities & Models
-â”‚   â”œâ”€â”€ repository/     # Repository Pattern Implementation
-â”‚   â”œâ”€â”€ database/       # Room Database Configuration
-â”‚   â””â”€â”€ sync/           # Firebase Sync Logic
-â”œâ”€â”€ functions/          # Specialized Workflows (AppFunctions)
-â””â”€â”€ utils/              # Extensions, Constants & Utility Classes
+├── di/                 # Dependency Injection (Hilt modules)
+├── ui/                 # Presentation Layer
+│   ├── auth/           # Authentication (Login, Register, Forget Password)
+│   ├── home/           # Dashboard and Navigation
+│   ├── note/           # Note Operations (Add, Edit, View, Details)
+│   ├── splash/         # App Entry Point
+│   └── adapter/        # RecyclerView Adapters
+├── viewmodel/          # Logic Layer (State Management & UI Logic)
+├── data/               # Data Layer (Local & Remote)
+│   ├── dao/            # Room Database DAOs
+│   ├── model/          # Data Entities & Models
+│   ├── repository/     # Repository Pattern Implementation
+│   ├── database/       # Room Database Configuration
+│   └── sync/           # Firebase Sync Logic
+├── functions/          # Specialized Workflows (AppFunctions)
+└── utils/              # Extensions, Constants & Utility Classes
 ```
 
 ---
 
-## ðŸš€ Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 *   Android Studio Ladybug or newer.
@@ -112,7 +112,7 @@ app/src/main/java/com/flatcode/littlenote/
 
 ---
 
-### ðŸ› ï¸ Technology Stack
+### 🛠️ Technology Stack
 *   **Language**: Kotlin (Modern, expressive, and safe development).
 *   **Dependency Injection**: **Dagger Hilt** (Simplified, standard DI for Android).
 *   **Cloud Infrastructure**: **Firebase** (Scalable authentication and real-time NoSQL storage).
@@ -126,7 +126,7 @@ app/src/main/java/com/flatcode/littlenote/
 
 ---
 
-## ðŸ”— Links & Resources
+## 🔗 Links & Resources
 *   **Compose Version:** [Little Note Compose](https://github.com/selimdawa/LittleNoteCompose/)
 *   **Legacy Versions:**
     *   [Kotlin Old Code Version](https://github.com/selimdawa/LittleNoteKotlinOld/)
@@ -135,6 +135,5 @@ app/src/main/java/com/flatcode/littlenote/
 
 ---
 
-## ðŸ“œ License
+## 📜 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
