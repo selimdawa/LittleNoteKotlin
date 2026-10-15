@@ -54,6 +54,10 @@ class RegisterFragment : Fragment() {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
 
+        binding.forget.setOnClickListener {
+            findNavController().navigate(R.id.action_registerFragment_to_forgetPasswordFragment)
+        }
+
         binding.go.setOnClickListener {
             val username = binding.nameEt.text.toString()
             val userEmail = binding.emailEt.text.toString()

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -20,6 +19,7 @@ import com.flatcode.littlenote.ui.adapter.NoteAdapter
 import com.flatcode.littlenote.utils.DATA
 import com.flatcode.littlenote.utils.dialogAboutAccount
 import com.flatcode.littlenote.utils.dialogCloseApp
+import com.flatcode.littlenote.utils.dialogDelete
 import com.flatcode.littlenote.viewmodel.AuthViewModel
 import com.flatcode.littlenote.viewmodel.HomeViewModel
 import com.flatcode.littlenote.viewmodel.NoteViewModel
@@ -160,13 +160,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun displayAlert() {
-        AlertDialog.Builder(requireContext()).setTitle(R.string.alert_delete_title)
-            .setMessage(R.string.alert_delete_message)
-            .setPositiveButton(R.string.alert_delete_positive) { _, _ ->
+        requireContext().dialogDelete(
+            onSync = {
                 findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
-            }.setNegativeButton(R.string.alert_delete_negative) { _, _ ->
+            },
+            onLogout = {
                 authViewModel.deleteAnonymousUser(homeViewModel.currentUser?.uid ?: "")
-            }.show()
+            }
+        )
     }
 
     private fun showToast(message: String) {
