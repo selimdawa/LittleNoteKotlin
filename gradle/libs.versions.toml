@@ -1,7 +1,7 @@
 [versions]
-agp = "9.4.1"
+agp = "9.5.0"
 kotlin = "2.4.21"
-firebaseBom = "35.0.0"
+firebaseBom = "35.1.0"
 coreKtx = "1.19.1"
 appcompat = "1.8.0"
 material = "1.14.0"
@@ -15,7 +15,7 @@ coroutines = "1.11.0"
 timber = "5.0.1"
 navigation = "2.10.2"
 room = "2.8.5"
-ksp = "2.3.12"
+ksp = "2.3.13"
 #noinspection GradleDependency
 appfunctions = "1.0.0-alpha11"
 work = "2.12.0"
